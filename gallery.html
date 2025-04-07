@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gallery | GlobeTrail AI</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <script>
+    tailwind.config = {
+      darkMode: 'class'
+    }
+  </script>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900">
+  <!-- Navigation Bar -->
+  <nav class="bg-white dark:bg-gray-800 shadow-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between h-16">
+        <div class="flex items-center">
+          <span class="text-xl font-bold text-blue-600 dark:text-blue-400">GlobeTrail AI</span>
+          <button id="theme-toggle" class="ml-4 p-2 rounded-full bg-gray-200 dark:bg-gray-700">
+            <i class="fas fa-moon dark:hidden"></i>
+            <i class="fas fa-sun hidden dark:block"></i>
+          </button>
+        </div>
+        <div class="hidden md:flex items-center space-x-8">
+          <a href="index.html" class="text-gray-700 dark:text-gray-300 hover:text-blue-600">Home</a>
+          <a href="destinations.html" class="text-gray-700 dark:text-gray-300 hover:text-blue-600">Destinations</a>
+          <a href="itinerary.html" class="text-gray-700 dark:text-gray-300 hover:text-blue-600">Itinerary</a>
+          <a href="gallery.html" class="text-blue-600 dark:text-blue-400 font-medium">Gallery</a>
+          <a href="login.html" class="text-gray-700 dark:text-gray-300 hover:text-blue-600">Login</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <section class="py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h1 class="text-3xl font-bold mb-8 dark:text-white">Gallery</h1>
+      
+      <div class="mb-6">
+        <input type="text" id="location-search" placeholder="Enter destination (e.g. Pune)" 
+               class="w-full md:w-1/2 p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+      </div>
+      
+      <div class="relative overflow-hidden h-96 mb-8">
+        <div class="flex h-full transition-transform duration-500 ease-in-out" id="image-slider">
+          <!-- Images will be loaded here by JavaScript -->
+        </div>
+        <button id="prev-btn" class="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 dark:bg-gray-700/80 p-2 rounded-full shadow-md hover:bg-white dark:hover:bg-gray-600">
+          <i class="fas fa-chevron-left text-gray-800 dark:text-white"></i>
+        </button>
+        <button id="next-btn" class="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 dark:bg-gray-700/80 p-2 rounded-full shadow-md hover:bg-white dark:hover:bg-gray-600">
+          <i class="fas fa-chevron-right text-gray-800 dark:text-white"></i>
+        </button>
+      </div>
+
+      <script>
+        // Theme toggle functionality
+        const themeToggle = document.getElementById('theme-toggle');
+        if (themeToggle) {
+          themeToggle.addEventListener('click', () => {
+            document.documentElement.classList.toggle('dark');
+            localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+          });
+          
+          // Set initial theme
+          if (localStorage.getItem('theme') === 'dark' || 
+              (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+          }
+        }
+
+        // Image slider functionality
+        const locationImages = {
+          'pune': [
+            {url: 'https://images.pexels.com/photos/1295038/pexels-photo-1295038.jpeg', title: 'Shaniwar Wada'},
+            {url: 'https://images.pexels.com/photos/2402257/pexels-photo-2402257.jpeg', title: 'Aga Khan Palace'},
+            {url: 'https://images.pexels.com/photos/2402258/pexels-photo-2402258.jpeg', title: 'Sinhagad Fort'}
+          ],
+          'default': [
+            {url: 'https://images.pexels.com/photos/994605/pexels-photo-994605.jpeg', title: 'Maldives Beach'},
+            {url: 'https://images.pexels.com/photos/417173/pexels-photo-417173.jpeg', title: 'Swiss Alps'},
+            {url: 'https://images.pexels.com/photos/374710/pexels-photo-374710.jpeg', title: 'New York City'}
+          ]
+        };
+
+        let currentSlide = 0;
+        let autoSlideInterval;
+
+        document.addEventListener('DOMContentLoaded', () => {
+          const slider = document.getElementById('image-slider');
+          const prevBtn = document.getElementById('prev-btn');
+          const nextBtn = document.getElementById('next-btn');
+          const searchInput = document.getElementById('location-search');
+
+          if (!slider || !prevBtn || !nextBtn || !searchInput) return;
+
+          function loadImages(location) {
+            clearInterval(autoSlideInterval);
+            const images = locationImages[location.toLowerCase()] || locationImages['default'];
+            slider.innerHTML = '';
+            
+            images.forEach(img => {
+              const slide = document.createElement('div');
+              slide.className = 'min-w-full h-full flex-shrink-0 relative';
+              slide.innerHTML = `
+                <img src="${img.url}" alt="${img.title}" class="w-full h-full object-cover">
+                <div class="absolute bottom-0 left-0 right-0 bg-black/50 text-white p-4">
+                  <h3 class="text-xl font-bold">${img.title}</h3>
+                </div>
+              `;
+              slider.appendChild(slide);
+            });
+            
+            currentSlide = 0;
+            updateSlider();
+            startAutoSlide();
+          }
+
+          function updateSlider() {
+            slider.style.transform = `translateX(-${currentSlide * 100}%)`;
+          }
+
+          function startAutoSlide() {
+            autoSlideInterval = setInterval(() => {
+              currentSlide = (currentSlide < slider.children.length - 1) ? currentSlide + 1 : 0;
+              updateSlider();
+            }, 5000);
+          }
+
+          // Event listeners
+          prevBtn.addEventListener('click', () => {
+            clearInterval(autoSlideInterval);
+            currentSlide = (currentSlide > 0) ? currentSlide - 1 : slider.children.length - 1;
+            updateSlider();
+            startAutoSlide();
+          });
+
+          nextBtn.addEventListener('click', () => {
+            clearInterval(autoSlideInterval);
+            currentSlide = (currentSlide < slider.children.length - 1) ? currentSlide + 1 : 0;
+            updateSlider();
+            startAutoSlide();
+          });
+
+          searchInput.addEventListener('input', (e) => {
+            loadImages(e.target.value);
+          });
+
+          // Initialize
+          loadImages('default');
+        });
+      </script>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-gray-800 text-white py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div>
+          <h3 class="text-xl font-bold mb-4">GlobeTrail AI</h3>
+          <p class="text-gray-400">Making travel planning effortless and fun.</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
