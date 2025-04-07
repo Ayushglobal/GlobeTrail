@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Itinerary Builder | TripPlanner.ai</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50">
+  <!-- Navigation Bar -->
+  <nav class="bg-white shadow-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between h-16">
+        <div class="flex items-center">
+          <span class="text-xl font-bold text-blue-600">TripPlanner.ai</span>
+        </div>
+        <div class="hidden md:flex items-center space-x-8">
+          <a href="index.html" class="text-gray-700 hover:text-blue-600">Home</a>
+          <a href="destinations.html" class="text-gray-700 hover:text-blue-600">Destinations</a>
+          <a href="itinerary.html" class="text-blue-600 font-medium">Itinerary</a>
+          <a href="gallery.html" class="text-gray-700 hover:text-blue-600">Gallery</a>
+          <a href="login.html" class="text-gray-700 hover:text-blue-600">Login</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <section class="py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h1 class="text-3xl font-bold mb-8">Your Travel Itinerary</h1>
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Activities Panel -->
+        <div class="bg-white p-6 rounded-lg shadow-md">
+          <h2 class="text-xl font-semibold mb-4">Available Activities</h2>
+          <div class="space-y-3" id="activities">
+            <div class="activity p-3 border rounded-lg cursor-move hover:bg-gray-50" draggable="true" data-cost="50">
+              <h3 class="font-medium">City Tour</h3>
+              <p class="text-sm text-gray-600">3 hour guided tour</p>
+              <span class="text-sm text-blue-600">$50</span>
+            </div>
+            <div class="activity p-3 border rounded-lg cursor-move hover:bg-gray-50" draggable="true" data-cost="120">
+              <h3 class="font-medium">Museum Visit</h3>
+              <p class="text-sm text-gray-600">Full day access</p>
+              <span class="text-sm text-blue-600">$120</span>
+            </div>
+            <div class="activity p-3 border rounded-lg cursor-move hover:bg-gray-50" draggable="true" data-cost="75">
+              <h3 class="font-medium">Boat Cruise</h3>
+              <p class="text-sm text-gray-600">2 hour sunset cruise</p>
+              <span class="text-sm text-blue-600">$75</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Itinerary Calendar -->
+        <div class="bg-white p-6 rounded-lg shadow-md lg:col-span-2">
+          <div class="flex justify-between items-center mb-6">
+            <h2 class="text-xl font-semibold">Your Itinerary</h2>
+            <div class="text-lg font-medium text-blue-600">
+              Total: <span id="total-cost">$0</span>
+            </div>
+          </div>
+          
+          <div class="space-y-6" id="itinerary-days">
+            <div class="day">
+              <h3 class="font-medium mb-3">Day 1 <input type="date" class="ml-2 border rounded px-2 py-1"></h3>
+              <div class="drop-zone min-h-20 p-3 border-2 border-dashed rounded-lg" ondragover="event.preventDefault()" ondrop="dropHandler(event)">
+                <p class="text-gray-400 text-sm">Drag activities here</p>
+              </div>
+            </div>
+            <div class="day">
+              <h3 class="font-medium mb-3">Day 2 <input type="date" class="ml-2 border rounded px-2 py-1"></h3>
+              <div class="drop-zone min-h-20 p-3 border-2 border-dashed rounded-lg" ondragover="event.preventDefault()" ondrop="dropHandler(event)">
+                <p class="text-gray-400 text-sm">Drag activities here</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <script>
+        let totalCost = 0;
+        const totalElement = document.getElementById('total-cost');
+        
+        function dragStartHandler(e) {
+          e.dataTransfer.setData('text/plain', e.target.outerHTML);
+          e.dataTransfer.setData('cost', e.target.dataset.cost);
+        }
+        
+        function dropHandler(e) {
+          e.preventDefault();
+          const html = e.dataTransfer.getData('text/plain');
+          const cost = parseInt(e.dataTransfer.getData('cost'));
+          
+          if (e.target.classList.contains('drop-zone')) {
+            e.target.innerHTML = html;
+            totalCost += cost;
+            totalElement.textContent = `$${totalCost}`;
+          }
+        }
+        
+        document.querySelectorAll('.activity').forEach(item => {
+          item.addEventListener('dragstart', dragStartHandler);
+        });
+      </script>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-gray-800 text-white py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div>
+          <h3 class="text-xl font-bold mb-4">TripPlanner.ai</h3>
+          <p class="text-gray-400">Making travel planning effortless and fun.</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
