@@ -3,119 +3,229 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Itinerary Builder | TripPlanner.ai</title>
+  <title>AI Itinerary Planner | GlobeTrail AI</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          animation: {
+            'fade-in': 'fadeIn 0.5s ease-in',
+            'slide-up': 'slideUp 0.5s ease-out'
+          },
+          keyframes: {
+            fadeIn: {
+              '0%': { opacity: '0' },
+              '100%': { opacity: '1' }
+            },
+            slideUp: {
+              '0%': { transform: 'translateY(20px)', opacity: '0' },
+              '100%': { transform: 'translateY(0)', opacity: '1' }
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    .packing-item {
+      transition: all 0.3s ease;
+    }
+    .packing-item:hover {
+      transform: scale(1.05);
+    }
+  </style>
 </head>
-<body class="bg-gray-50">
+<body class="bg-gray-50 dark:bg-gray-900">
   <!-- Navigation Bar -->
-  <nav class="bg-white shadow-md">
+  <nav class="bg-white dark:bg-gray-800 shadow-md">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between h-16">
         <div class="flex items-center">
-          <span class="text-xl font-bold text-blue-600">TripPlanner.ai</span>
+          <span class="text-xl font-bold text-blue-600 dark:text-blue-400">GlobeTrail AI</span>
+          <button id="theme-toggle" class="ml-4 p-2 rounded-full bg-gray-200 dark:bg-gray-700">
+            <i class="fas fa-moon dark:hidden"></i>
+            <i class="fas fa-sun hidden dark:block"></i>
+          </button>
         </div>
         <div class="hidden md:flex items-center space-x-8">
-          <a href="index.html" class="text-gray-700 hover:text-blue-600">Home</a>
-          <a href="destinations.html" class="text-gray-700 hover:text-blue-600">Destinations</a>
-          <a href="itinerary.html" class="text-blue-600 font-medium">Itinerary</a>
-          <a href="gallery.html" class="text-gray-700 hover:text-blue-600">Gallery</a>
-          <a href="login.html" class="text-gray-700 hover:text-blue-600">Login</a>
+          <a href="index.html" class="text-gray-700 dark:text-gray-300 hover:text-blue-600">Home</a>
+          <a href="destinations.html" class="text-gray-700 dark:text-gray-300 hover:text-blue-600">Destinations</a>
+          <a href="itinerary.html" class="text-blue-600 dark:text-blue-400 font-medium">Itinerary</a>
+          <a href="gallery.html" class="text-gray-700 dark:text-gray-300 hover:text-blue-600">Gallery</a>
+          <a href="login.html" class="text-gray-700 dark:text-gray-300 hover:text-blue-600">Login</a>
         </div>
       </div>
     </div>
   </nav>
 
-  <!-- Main Content -->
-  <section class="py-12">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <h1 class="text-3xl font-bold mb-8">Your Travel Itinerary</h1>
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <!-- Activities Panel -->
-        <div class="bg-white p-6 rounded-lg shadow-md">
-          <h2 class="text-xl font-semibold mb-4">Available Activities</h2>
-          <div class="space-y-3" id="activities">
-            <div class="activity p-3 border rounded-lg cursor-move hover:bg-gray-50" draggable="true" data-cost="50">
-              <h3 class="font-medium">City Tour</h3>
-              <p class="text-sm text-gray-600">3 hour guided tour</p>
-              <span class="text-sm text-blue-600">$50</span>
-            </div>
-            <div class="activity p-3 border rounded-lg cursor-move hover:bg-gray-50" draggable="true" data-cost="120">
-              <h3 class="font-medium">Museum Visit</h3>
-              <p class="text-sm text-gray-600">Full day access</p>
-              <span class="text-sm text-blue-600">$120</span>
-            </div>
-            <div class="activity p-3 border rounded-lg cursor-move hover:bg-gray-50" draggable="true" data-cost="75">
-              <h3 class="font-medium">Boat Cruise</h3>
-              <p class="text-sm text-gray-600">2 hour sunset cruise</p>
-              <span class="text-sm text-blue-600">$75</span>
-            </div>
+  <!-- AI Itinerary Planner -->
+  <section class="py-12 animate-fade-in">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h1 class="text-3xl font-bold mb-8 dark:text-white">AI Travel Planner</h1>
+      
+      <!-- Trip Details Form -->
+      <div class="bg-white dark:bg-gray-700 rounded-xl shadow-lg p-6 mb-8 animate-slide-up">
+        <h2 class="text-2xl font-semibold mb-6 dark:text-white">Plan Your Trip</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label class="block text-gray-700 dark:text-gray-300 mb-2">From</label>
+            <input type="text" id="origin" placeholder="Starting city" class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:text-white">
+          </div>
+          <div>
+            <label class="block text-gray-700 dark:text-gray-300 mb-2">To</label>
+            <input type="text" id="destination" placeholder="Destination city" class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:text-white">
+          </div>
+          <div>
+            <label class="block text-gray-700 dark:text-gray-300 mb-2">Travel Dates</label>
+            <input type="date" id="start-date" class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-600 dark:border-gray-500">
+          </div>
+          <div>
+            <label class="block text-gray-700 dark:text-gray-300 mb-2">Budget (₹)</label>
+            <input type="number" id="budget" placeholder="15000" class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:text-white">
+          </div>
+        </div>
+        
+        <div class="mt-6">
+          <label class="block text-gray-700 dark:text-gray-300 mb-2">Travel Preferences</label>
+          <textarea id="preferences" rows="3" placeholder="Adventure, relaxation, cultural experiences..." class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:text-white"></textarea>
+        </div>
+        
+        <button id="generate-btn" class="mt-6 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition duration-300 flex items-center">
+          <i class="fas fa-magic mr-2"></i> Generate AI Itinerary
+        </button>
+      </div>
+
+      <!-- AI Generated Itinerary (Initially hidden) -->
+      <div id="itinerary-results" class="hidden animate-slide-up">
+        <div class="bg-white dark:bg-gray-700 rounded-xl shadow-lg overflow-hidden mb-8">
+          <div class="p-6 border-b border-gray-200 dark:border-gray-600">
+            <h2 class="text-2xl font-semibold dark:text-white">Your Personalized Itinerary</h2>
+            <p class="text-gray-600 dark:text-gray-300 mt-2">From <span id="display-origin" class="font-medium">Mumbai</span> to <span id="display-destination" class="font-medium">Goa</span></p>
+          </div>
+          
+          <!-- Itinerary Days -->
+          <div id="itinerary-days" class="divide-y divide-gray-200 dark:divide-gray-600">
+            <!-- Will be populated by JavaScript -->
           </div>
         </div>
 
-        <!-- Itinerary Calendar -->
-        <div class="bg-white p-6 rounded-lg shadow-md lg:col-span-2">
-          <div class="flex justify-between items-center mb-6">
-            <h2 class="text-xl font-semibold">Your Itinerary</h2>
-            <div class="text-lg font-medium text-blue-600">
-              Total: <span id="total-cost">$0</span>
-            </div>
-          </div>
+        <!-- Packing Suggestions -->
+        <div class="bg-white dark:bg-gray-700 rounded-xl shadow-lg p-6 animate-slide-up">
+          <h2 class="text-2xl font-semibold mb-4 dark:text-white">Packing Essentials</h2>
+          <p class="text-gray-600 dark:text-gray-300 mb-6">AI-recommended items to bring based on your destination and season:</p>
           
-          <div class="space-y-6" id="itinerary-days">
-            <div class="day">
-              <h3 class="font-medium mb-3">Day 1 <input type="date" class="ml-2 border rounded px-2 py-1"></h3>
-              <div class="drop-zone min-h-20 p-3 border-2 border-dashed rounded-lg" ondragover="event.preventDefault()" ondrop="dropHandler(event)">
-                <p class="text-gray-400 text-sm">Drag activities here</p>
-              </div>
-            </div>
-            <div class="day">
-              <h3 class="font-medium mb-3">Day 2 <input type="date" class="ml-2 border rounded px-2 py-1"></h3>
-              <div class="drop-zone min-h-20 p-3 border-2 border-dashed rounded-lg" ondragover="event.preventDefault()" ondrop="dropHandler(event)">
-                <p class="text-gray-400 text-sm">Drag activities here</p>
-              </div>
-            </div>
+          <div id="packing-list" class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <!-- Will be populated by JavaScript -->
           </div>
         </div>
       </div>
-
-      <script>
-        let totalCost = 0;
-        const totalElement = document.getElementById('total-cost');
-        
-        function dragStartHandler(e) {
-          e.dataTransfer.setData('text/plain', e.target.outerHTML);
-          e.dataTransfer.setData('cost', e.target.dataset.cost);
-        }
-        
-        function dropHandler(e) {
-          e.preventDefault();
-          const html = e.dataTransfer.getData('text/plain');
-          const cost = parseInt(e.dataTransfer.getData('cost'));
-          
-          if (e.target.classList.contains('drop-zone')) {
-            e.target.innerHTML = html;
-            totalCost += cost;
-            totalElement.textContent = `$${totalCost}`;
-          }
-        }
-        
-        document.querySelectorAll('.activity').forEach(item => {
-          item.addEventListener('dragstart', dragStartHandler);
-        });
-      </script>
     </div>
   </section>
 
-  <!-- Footer -->
-  <footer class="bg-gray-800 text-white py-12">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-        <div>
-          <h3 class="text-xl font-bold mb-4">TripPlanner.ai</h3>
-          <p class="text-gray-400">Making travel planning effortless and fun.</p>
-        </div>
-      </div>
-    </div>
-  </footer>
+  <script>
+    // Theme toggle functionality
+    const themeToggle = document.getElementById('theme-toggle');
+    themeToggle.addEventListener('click', () => {
+      const isDark = document.documentElement.classList.toggle('dark');
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+      themeToggle.classList.toggle('bg-gray-200', !isDark);
+      themeToggle.classList.toggle('bg-gray-700', isDark);
+    });
+
+    // Initialize theme
+    if (localStorage.getItem('theme') === 'dark' || 
+        (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.classList.add('dark');
+      themeToggle.classList.replace('bg-gray-200', 'bg-gray-700');
+    }
+
+    // AI Itinerary Generation
+    document.getElementById('generate-btn').addEventListener('click', function() {
+      const origin = document.getElementById('origin').value || 'Your City';
+      const destination = document.getElementById('destination').value || 'Dream Destination';
+      const budget = document.getElementById('budget').value || '15000';
+      
+      // Display the inputs
+      document.getElementById('display-origin').textContent = origin;
+      document.getElementById('display-destination').textContent = destination;
+      
+      // Sample itinerary data (in real app, this would come from an API)
+      const sampleItinerary = [
+        {
+          day: 1,
+          title: "Arrival & Exploration",
+          activities: [
+            "Check into your hotel/resort",
+            "Local market visit for souvenirs",
+            "Sunset at the beach"
+          ]
+        },
+        {
+          day: 2,
+          title: "Adventure Day",
+          activities: [
+            "Morning water sports",
+            "Afternoon cultural tour",
+            "Evening cruise with dinner"
+          ]
+        }
+      ];
+
+      // Sample packing list (would be AI-generated in production)
+      const packingItems = [
+        { name: "Passport/ID", icon: "fa-id-card" },
+        { name: "Swimwear", icon: "fa-umbrella-beach" },
+        { name: "Sunscreen", icon: "fa-sun" },
+        { name: "Comfortable shoes", icon: "fa-shoe-prints" },
+        { name: "Camera", icon: "fa-camera" },
+        { name: "Medications", icon: "fa-briefcase-medical" },
+        { name: "Travel adapter", icon: "fa-plug" },
+        { name: "Light jacket", icon: "fa-jacket" }
+      ];
+
+      // Render itinerary
+      const itineraryContainer = document.getElementById('itinerary-days');
+      itineraryContainer.innerHTML = '';
+      
+      sampleItinerary.forEach(day => {
+        const dayElement = document.createElement('div');
+        dayElement.className = 'p-6';
+        dayElement.innerHTML = `
+          <h3 class="text-xl font-bold mb-3 dark:text-white">Day ${day.day}: ${day.title}</h3>
+          <ul class="space-y-2">
+            ${day.activities.map(activity => `
+              <li class="flex items-start">
+                <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                <span class="dark:text-gray-300">${activity}</span>
+              </li>
+            `).join('')}
+          </ul>
+        `;
+        itineraryContainer.appendChild(dayElement);
+      });
+
+      // Render packing list
+      const packingContainer = document.getElementById('packing-list');
+      packingContainer.innerHTML = '';
+      
+      packingItems.forEach(item => {
+        const itemElement = document.createElement('div');
+        itemElement.className = 'packing-item bg-gray-100 dark:bg-gray-600 p-4 rounded-lg flex items-center';
+        itemElement.innerHTML = `
+          <i class="fas ${item.icon} text-blue-500 mr-3"></i>
+          <span class="dark:text-gray-300">${item.name}</span>
+        `;
+        packingContainer.appendChild(itemElement);
+      });
+
+      // Show results with animation
+      document.getElementById('itinerary-results').classList.remove('hidden');
+      document.getElementById('itinerary-results').scrollIntoView({ behavior: 'smooth' });
+    });
+  </script>
 </body>
 </html>
