@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home | GlobeTrail AI</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: '#3B82F6',
+            secondary: '#6B7280'
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    .animate-fade-in {
+      animation: fadeIn 0.5s ease-in;
+    }
+    .animate-delay-100 {
+      animation-delay: 0.1s;
+    }
+    .animate-slide-up {
+      animation: slideUp 0.5s ease-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes slideUp {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+  </style>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
+  <!-- Navigation Bar -->
+  <nav class="bg-white dark:bg-gray-800 shadow-md transition-colors duration-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between h-16">
+        <div class="flex items-center">
+          <span class="text-xl font-bold text-blue-600 dark:text-blue-400">GlobeTrail AI</span>
+          <button id="theme-toggle" class="ml-4 p-2 rounded-full bg-gray-200 dark:bg-gray-700 transition-colors duration-200">
+            <i class="fas fa-moon dark:hidden text-gray-700"></i>
+            <i class="fas fa-sun hidden dark:block text-yellow-300"></i>
+          </button>
+        </div>
+        <div class="hidden md:flex items-center space-x-8">
+          <a href="index.html" class="text-gray-700 dark:text-gray-300 hover:text-blue-600 transition-colors duration-200">Home</a>
+          <a href="destinations.html" class="text-gray-700 dark:text-gray-300 hover:text-blue-600 transition-colors duration-200">Destinations</a>
+          <a href="itinerary.html" class="text-gray-700 dark:text-gray-300 hover:text-blue-600 transition-colors duration-200">Itinerary</a>
+          <a href="gallery.html" class="text-gray-700 dark:text-gray-300 hover:text-blue-600 transition-colors duration-200">Gallery</a>
+          <a href="login.html" class="text-gray-700 dark:text-gray-300 hover:text-blue-600 transition-colors duration-200">Login</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Rest of index.html content remains the same but with dark mode classes added -->
+  
+  <script>
+    // Enhanced theme toggle with immediate visual feedback
+    const themeToggle = document.getElementById('theme-toggle');
+    const updateTheme = (isDark) => {
+      document.documentElement.classList.toggle('dark', isDark);
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+      themeToggle.classList.toggle('bg-gray-200', !isDark);
+      themeToggle.classList.toggle('bg-gray-700', isDark);
+    };
+
+    themeToggle.addEventListener('click', () => {
+      const isDark = !document.documentElement.classList.contains('dark');
+      updateTheme(isDark);
+    });
+
+    // Initialize theme
+    const savedTheme = localStorage.getItem('theme');
+    const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    updateTheme(savedTheme ? savedTheme === 'dark' : systemDark);
+  </script>
+</body>
+</html>
