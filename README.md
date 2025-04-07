@@ -1,9 +1,4 @@
 
-Built by https://www.blackbox.ai
-
----
-
-```markdown
 # GlobeTrail AI
 
 GlobeTrail AI is a web-based application designed for travel enthusiasts. It helps users plan their trips, explore popular destinations, build personalized itineraries, view a gallery of destinations, and manage account logins. The application features a responsive design, dark mode support, and an intuitive user interface powered by Tailwind CSS.
