@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Home | GlobeTrail AI</title>
+  <title>GlobeTrail AI - Smart Travel Planning</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <script>
@@ -20,27 +20,20 @@
     }
   </script>
   <style>
-    .animate-fade-in {
-      animation: fadeIn 0.5s ease-in;
+    .hero-section {
+      background: linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%);
     }
-    .animate-delay-100 {
-      animation-delay: 0.1s;
+    .feature-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
     }
-    .animate-slide-up {
-      animation: slideUp 0.5s ease-out;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-    @keyframes slideUp {
-      from { transform: translateY(20px); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
+    .dark .hero-section {
+      background: linear-gradient(135deg, #1E40AF 0%, #1E3A8A 100%);
     }
   </style>
 </head>
 <body class="bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
-  <!-- Navigation Bar -->
+  <!-- Navigation -->
   <nav class="bg-white dark:bg-gray-800 shadow-md transition-colors duration-200">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between h-16">
@@ -52,7 +45,7 @@
           </button>
         </div>
         <div class="hidden md:flex items-center space-x-8">
-          <a href="index.html" class="text-gray-700 dark:text-gray-300 hover:text-blue-600 transition-colors duration-200">Home</a>
+          <a href="index.html" class="text-blue-600 dark:text-blue-400 font-medium">Home</a>
           <a href="destinations.html" class="text-gray-700 dark:text-gray-300 hover:text-blue-600 transition-colors duration-200">Destinations</a>
           <a href="itinerary.html" class="text-gray-700 dark:text-gray-300 hover:text-blue-600 transition-colors duration-200">Itinerary</a>
           <a href="gallery.html" class="text-gray-700 dark:text-gray-300 hover:text-blue-600 transition-colors duration-200">Gallery</a>
@@ -62,10 +55,121 @@
     </div>
   </nav>
 
-  <!-- Rest of index.html content remains the same but with dark mode classes added -->
-  
+  <!-- Hero Section -->
+  <section class="hero-section text-white py-20 transition-colors duration-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h1 class="text-4xl md:text-5xl font-bold mb-6">Plan Your Perfect Trip</h1>
+      <p class="text-xl mb-8 max-w-2xl mx-auto">Discover amazing destinations and create personalized itineraries with AI-powered travel planning.</p>
+      <div class="max-w-md mx-auto bg-white dark:bg-gray-700 rounded-lg shadow-lg p-6">
+        <div class="grid grid-cols-1 gap-4">
+          <div>
+            <input type="text" placeholder="Where to?" class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:text-white">
+          </div>
+          <button class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition duration-300">
+            Search Destinations
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="py-16 bg-gray-50 dark:bg-gray-800 transition-colors duration-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-3xl font-bold mb-12 text-center dark:text-white">Why Choose GlobeTrail AI?</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="feature-card bg-white dark:bg-gray-700 rounded-lg shadow-md p-6 transition-transform duration-300">
+          <div class="text-blue-600 dark:text-blue-400 mb-4">
+            <i class="fas fa-route text-4xl"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-2 dark:text-white">Smart Itineraries</h3>
+          <p class="text-gray-600 dark:text-gray-300">AI-generated travel plans tailored to your preferences and budget.</p>
+        </div>
+        <div class="feature-card bg-white dark:bg-gray-700 rounded-lg shadow-md p-6 transition-transform duration-300">
+          <div class="text-blue-600 dark:text-blue-400 mb-4">
+            <i class="fas fa-tag text-4xl"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-2 dark:text-white">Best Deals</h3>
+          <p class="text-gray-600 dark:text-gray-300">We compare prices across providers to get you the best value.</p>
+        </div>
+        <div class="feature-card bg-white dark:bg-gray-700 rounded-lg shadow-md p-6 transition-transform duration-300">
+          <div class="text-blue-600 dark:text-blue-400 mb-4">
+            <i class="fas fa-headset text-4xl"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-2 dark:text-white">24/7 Support</h3>
+          <p class="text-gray-600 dark:text-gray-300">Our travel experts are always available to assist you.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section class="py-16 bg-white dark:bg-gray-900 transition-colors duration-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-3xl font-bold mb-12 text-center dark:text-white">What Our Travelers Say</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div class="bg-gray-50 dark:bg-gray-700 p-6 rounded-lg">
+          <div class="flex items-center mb-4">
+            <div class="w-12 h-12 rounded-full bg-gray-300 dark:bg-gray-600 mr-4"></div>
+            <div>
+              <h4 class="font-bold dark:text-white">Sarah Johnson</h4>
+              <p class="text-gray-500 dark:text-gray-400 text-sm">Travel Enthusiast</p>
+            </div>
+          </div>
+          <p class="text-gray-600 dark:text-gray-300">"GlobeTrail AI planned my perfect Bali getaway! The itinerary was spot-on and saved me hours of research."</p>
+        </div>
+        <div class="bg-gray-50 dark:bg-gray-700 p-6 rounded-lg">
+          <div class="flex items-center mb-4">
+            <div class="w-12 h-12 rounded-full bg-gray-300 dark:bg-gray-600 mr-4"></div>
+            <div>
+              <h4 class="font-bold dark:text-white">Michael Chen</h4>
+              <p class="text-gray-500 dark:text-gray-400 text-sm">Business Traveler</p>
+            </div>
+          </div>
+          <p class="text-gray-600 dark:text-gray-300">"The dark mode is perfect for late-night travel planning. The whole experience is seamless!"</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-gray-800 text-white py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div>
+          <h3 class="text-xl font-bold mb-4">GlobeTrail AI</h3>
+          <p class="text-gray-400">Making travel planning effortless and fun.</p>
+        </div>
+        <div>
+          <h4 class="text-lg font-semibold mb-4">Explore</h4>
+          <ul class="space-y-2">
+            <li><a href="#" class="text-gray-400 hover:text-white">Destinations</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-white">Travel Guides</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-white">Special Offers</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="text-lg font-semibold mb-4">Company</h4>
+          <ul class="space-y-2">
+            <li><a href="#" class="text-gray-400 hover:text-white">About Us</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-white">Careers</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-white">Contact</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="text-lg font-semibold mb-4">Connect</h4>
+          <div class="flex space-x-4">
+            <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-twitter"></i></a>
+            <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-instagram"></i></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
   <script>
-    // Enhanced theme toggle with immediate visual feedback
+    // Theme toggle with immediate feedback
     const themeToggle = document.getElementById('theme-toggle');
     const updateTheme = (isDark) => {
       document.documentElement.classList.toggle('dark', isDark);
