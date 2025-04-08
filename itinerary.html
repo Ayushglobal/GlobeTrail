@@ -144,39 +144,81 @@
     }
 
     // AI Itinerary Generation
-    document.getElementById('generate-btn').addEventListener('click', function() {
-      const origin = document.getElementById('origin').value || 'Your City';
-      const destination = document.getElementById('destination').value || 'Dream Destination';
-      const budget = document.getElementById('budget').value || '15000';
+    document.getElementById('generate-btn').addEventListener('click', async function() {
+      const btn = this;
+      const origin = document.getElementById('origin').value;
+      const destination = document.getElementById('destination').value;
+      const startDate = document.getElementById('start-date').value;
+      const budget = document.getElementById('budget').value;
+      const preferences = document.getElementById('preferences').value;
       
-      // Display the inputs
-      document.getElementById('display-origin').textContent = origin;
-      document.getElementById('display-destination').textContent = destination;
-      
-      // Sample itinerary data (in real app, this would come from an API)
-      const sampleItinerary = [
-        {
-          day: 1,
-          title: "Arrival & Exploration",
-          activities: [
-            "Check into your hotel/resort",
-            "Local market visit for souvenirs",
-            "Sunset at the beach"
-          ]
-        },
-        {
-          day: 2,
-          title: "Adventure Day",
-          activities: [
-            "Morning water sports",
-            "Afternoon cultural tour",
-            "Evening cruise with dinner"
-          ]
-        }
-      ];
+      if (!destination) {
+        alert('Please enter a destination');
+        return;
+      }
 
-      // Sample packing list (would be AI-generated in production)
-      const packingItems = [
+      // Show loading state
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Generating...';
+      
+      try {
+        // Call backend API
+        const response = await fetch('http://localhost:5000/generate-itinerary', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            origin,
+            destination, 
+            startDate,
+            budget,
+            preferences
+          })
+        });
+
+        const data = await response.json();
+        
+        if (data.status !== 'success') {
+          throw new Error(data.message || 'Failed to generate itinerary');
+        }
+
+        // Display the inputs
+        document.getElementById('display-origin').textContent = origin || 'Your City';
+        document.getElementById('display-destination').textContent = destination;
+        
+        // Store destination for gallery
+        localStorage.setItem('selectedDestination', destination);
+        
+        // Parse response data
+        const itineraryData = JSON.parse(data.data);
+        
+        // Sample itinerary data structure if API fails
+        if (!itineraryData.days) {
+          itineraryData.days = [
+            {
+              day: 1,
+              title: "Arrival & Exploration",
+              activities: [
+                "Check into your hotel/resort",
+                "Local market visit for souvenirs",
+                "Sunset at the beach"
+              ]
+            },
+            {
+              day: 2,
+              title: "Adventure Day",
+              activities: [
+                "Morning water sports",
+                "Afternoon cultural tour",
+                "Evening cruise with dinner"
+              ]
+            }
+          ];
+        }
+
+        if (!itineraryData.packingList) {
+          itineraryData.packingList = [
         { name: "Passport/ID", icon: "fa-id-card" },
         { name: "Swimwear", icon: "fa-umbrella-beach" },
         { name: "Sunscreen", icon: "fa-sun" },
