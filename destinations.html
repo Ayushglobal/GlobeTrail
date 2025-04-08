@@ -3,89 +3,162 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Destinations | GlobeTrail.ai</title>
+  <title>Destinations | GlobeTrail AI</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          animation: {
+            'fade-in': 'fadeIn 0.5s ease-out',
+            'float': 'float 6s ease-in-out infinite'
+          },
+          keyframes: {
+            fadeIn: {
+              '0%': { opacity: '0', transform: 'translateY(20px)' },
+              '100%': { opacity: '1', transform: 'translateY(0)' }
+            },
+            float: {
+              '0%, 100%': { transform: 'translateY(0)' },
+              '50%': { transform: 'translateY(-10px)' }
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    .destination-card {
+      transition: all 0.3s ease;
+    }
+    .destination-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
+    }
+  </style>
 </head>
-<body class="bg-gray-50">
-  <!-- Navigation Bar (same as index.html) -->
-  <nav class="bg-white shadow-md">
+<body class="bg-gray-50 dark:bg-gray-900">
+  <!-- Navigation -->
+  <nav class="bg-white dark:bg-gray-800 shadow-md">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between h-16">
         <div class="flex items-center">
-          <span class="text-xl font-bold text-blue-600">TripPlanner.ai</span>
+          <span class="text-xl font-bold text-blue-600 dark:text-blue-400">GlobeTrail AI</span>
+          <button id="theme-toggle" class="ml-4 p-2 rounded-full bg-gray-200 dark:bg-gray-700">
+            <i class="fas fa-moon dark:hidden"></i>
+            <i class="fas fa-sun hidden dark:block"></i>
+          </button>
         </div>
         <div class="hidden md:flex items-center space-x-8">
-          <a href="index.html" class="text-gray-700 hover:text-blue-600">Home</a>
-          <a href="destinations.html" class="text-blue-600 font-medium">Destinations</a>
-          <a href="itinerary.html" class="text-gray-700 hover:text-blue-600">Itinerary</a>
-          <a href="gallery.html" class="text-gray-700 hover:text-blue-600">Gallery</a>
-          <a href="login.html" class="text-gray-700 hover:text-blue-600">Login</a>
+          <a href="index.html" class="text-gray-700 dark:text-gray-300 hover:text-blue-600">Home</a>
+          <a href="destinations.html" class="text-blue-600 dark:text-blue-400 font-medium">Destinations</a>
+          <a href="itinerary.html" class="text-gray-700 dark:text-gray-300 hover:text-blue-600">Itinerary</a>
+          <a href="gallery.html" class="text-gray-700 dark:text-gray-300 hover:text-blue-600">Gallery</a>
+          <a href="login.html" class="text-gray-700 dark:text-gray-300 hover:text-blue-600">Login</a>
+        </div>
+        <!-- Mobile menu button -->
+        <div class="md:hidden flex items-center">
+          <button id="mobile-menu-button" class="text-gray-500 hover:text-blue-600">
+            <i class="fas fa-bars text-xl"></i>
+          </button>
         </div>
       </div>
+    </div>
+    <!-- Mobile menu -->
+    <div id="mobile-menu" class="md:hidden hidden bg-white dark:bg-gray-800 px-2 pt-2 pb-3 space-y-1">
+      <a href="index.html" class="block px-3 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600">Home</a>
+      <a href="destinations.html" class="block px-3 py-2 text-blue-600 dark:text-blue-400">Destinations</a>
+      <a href="itinerary.html" class="block px-3 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600">Itinerary</a>
+      <a href="gallery.html" class="block px-3 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600">Gallery</a>
+      <a href="login.html" class="block px-3 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600">Login</a>
     </div>
   </nav>
 
   <!-- Main Content -->
-  <section class="py-12">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <h1 class="text-3xl font-bold mb-8">Popular Destinations</h1>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition duration-300">
-          <img src="https://images.pexels.com/photos/753626/pexels-photo-753626.jpeg" alt="Bali" class="w-full h-48 object-cover">
+  <section class="py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto">
+      <h1 class="text-3xl font-bold mb-8 text-center dark:text-white animate-fade-in">Explore Destinations</h1>
+      
+      <!-- Search and Filters -->
+      <div class="mb-8 bg-white dark:bg-gray-700 p-4 rounded-lg shadow-md">
+        <div class="flex flex-col md:flex-row gap-4">
+          <input type="text" placeholder="Search destinations..." class="flex-grow p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:text-white">
+          <select class="p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:text-white">
+            <option>All Categories</option>
+            <option>Beaches</option>
+            <option>Mountains</option>
+            <option>Cities</option>
+            <option>Historical</option>
+          </select>
+          <button class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition duration-300">
+            <i class="fas fa-search mr-2"></i> Search
+          </button>
+        </div>
+      </div>
+
+      <!-- Destinations Grid -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Destination Card 1 -->
+        <div class="destination-card bg-white dark:bg-gray-700 rounded-xl shadow-md overflow-hidden animate-fade-in">
+          <div class="relative h-48 overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1503917988258-f87a78e3c995?auto=format&fit=crop&w=600&q=80" 
+                 alt="Mountain Resort" 
+                 class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
+            <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
+              <span class="bg-blue-600 text-white text-xs font-semibold px-2 py-1 rounded">Popular</span>
+            </div>
+          </div>
           <div class="p-6">
-            <h3 class="text-xl font-semibold mb-2">Bali, Indonesia</h3>
-            <p class="text-gray-600 mb-4">Tropical paradise with lush jungles and vibrant culture. Perfect for relaxation and adventure.</p>
+            <h3 class="text-xl font-bold mb-2 dark:text-white">Swiss Alps Retreat</h3>
+            <div class="flex items-center mb-4">
+              <div class="flex text-yellow-400 mr-2">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star-half-alt"></i>
+              </div>
+              <span class="text-gray-600 dark:text-gray-300 text-sm">4.5 (128 reviews)</span>
+            </div>
+            <p class="text-gray-600 dark:text-gray-300 mb-4">Experience breathtaking mountain views and luxury accommodations.</p>
             <div class="flex justify-between items-center">
-              <span class="text-blue-600 font-bold">From $1,200</span>
-              <button class="bg-blue-100 text-blue-600 px-4 py-2 rounded-lg hover:bg-blue-200">View Details</button>
+              <span class="font-bold text-lg dark:text-white">$199/night</span>
+              <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition duration-300">
+                View Details
+              </button>
             </div>
           </div>
         </div>
-        <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition duration-300">
-          <img src="https://images.pexels.com/photos/338515/pexels-photo-338515.jpeg" alt="Paris" class="w-full h-48 object-cover">
-          <div class="p-6">
-            <h3 class="text-xl font-semibold mb-2">Paris, France</h3>
-            <p class="text-gray-600 mb-4">The city of love with iconic landmarks, world-class museums, and exquisite cuisine.</p>
-            <div class="flex justify-between items-center">
-              <span class="text-blue-600 font-bold">From $1,800</span>
-              <button class="bg-blue-100 text-blue-600 px-4 py-2 rounded-lg hover:bg-blue-200">View Details</button>
-            </div>
-          </div>
-        </div>
-        <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition duration-300">
-          <img src="https://images.pexels.com/photos/4151484/pexels-photo-4151484.jpeg" alt="Tokyo" class="w-full h-48 object-cover">
-          <div class="p-6">
-            <h3 class="text-xl font-semibold mb-2">Tokyo, Japan</h3>
-            <p class="text-gray-600 mb-4">Futuristic metropolis blending cutting-edge technology with ancient traditions.</p>
-            <div class="flex justify-between items-center">
-              <span class="text-blue-600 font-bold">From $2,000</span>
-              <button class="bg-blue-100 text-blue-600 px-4 py-2 rounded-lg hover:bg-blue-200">View Details</button>
-            </div>
-          </div>
-        </div>
+
+        <!-- More destination cards would go here -->
       </div>
     </div>
   </section>
 
-  <!-- Footer (same as index.html) -->
-  <footer class="bg-gray-800 text-white py-12">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-        <div>
-          <h3 class="text-xl font-bold mb-4">TripPlanner.ai</h3>
-          <p class="text-gray-400">Making travel planning effortless and fun.</p>
-        </div>
-        <div>
-          <h4 class="font-semibold mb-4">Quick Links</h4>
-          <ul class="space-y-2">
-            <li><a href="index.html" class="text-gray-400 hover:text-white">Home</a></li>
-            <li><a href="destinations.html" class="text-gray-400 hover:text-white">Destinations</a></li>
-            <li><a href="itinerary.html" class="text-gray-400 hover:text-white">Itinerary</a></li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </footer>
+  <!-- Footer would go here -->
+
+  <script>
+    // Theme toggle functionality
+    const themeToggle = document.getElementById('theme-toggle');
+    themeToggle.addEventListener('click', () => {
+      document.documentElement.classList.toggle('dark');
+      localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+    });
+
+    // Mobile menu toggle
+    const mobileMenuButton = document.getElementById('mobile-menu-button');
+    const mobileMenu = document.getElementById('mobile-menu');
+    mobileMenuButton.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+    });
+
+    // Initialize theme
+    if (localStorage.getItem('theme') === 'dark' || 
+        (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.classList.add('dark');
+    }
+  </script>
 </body>
 </html>
