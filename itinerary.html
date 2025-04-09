@@ -217,23 +217,52 @@
           ];
         }
 
+        // Ensure packing list is available
         if (!itineraryData.packingList) {
           itineraryData.packingList = [
-        { name: "Passport/ID", icon: "fa-id-card" },
-        { name: "Swimwear", icon: "fa-umbrella-beach" },
-        { name: "Sunscreen", icon: "fa-sun" },
-        { name: "Comfortable shoes", icon: "fa-shoe-prints" },
-        { name: "Camera", icon: "fa-camera" },
-        { name: "Medications", icon: "fa-briefcase-medical" },
-        { name: "Travel adapter", icon: "fa-plug" },
-        { name: "Light jacket", icon: "fa-jacket" }
-      ];
+            { name: "Passport/ID", icon: "fa-id-card" },
+            { name: "Swimwear", icon: "fa-umbrella-beach" },
+            { name: "Sunscreen", icon: "fa-sun" },
+            { name: "Comfortable shoes", icon: "fa-shoe-prints" },
+            { name: "Camera", icon: "fa-camera" },
+            { name: "Medications", icon: "fa-briefcase-medical" },
+            { name: "Travel adapter", icon: "fa-plug" },
+            { name: "Light jacket", icon: "fa-jacket" }
+          ];
+        }
 
-      // Render itinerary
-      const itineraryContainer = document.getElementById('itinerary-days');
-      itineraryContainer.innerHTML = '';
+        // Ensure packing list is available
+        if (!itineraryData.packingList) {
+          itineraryData.packingList = [
+            { name: "Passport/ID", icon: "fa-id-card" },
+            { name: "Swimwear", icon: "fa-umbrella-beach" },
+            { name: "Sunscreen", icon: "fa-sun" },
+            { name: "Comfortable shoes", icon: "fa-shoe-prints" },
+            { name: "Camera", icon: "fa-camera" },
+            { name: "Medications", icon: "fa-briefcase-medical" },
+            { name: "Travel adapter", icon: "fa-plug" },
+            { name: "Light jacket", icon: "fa-jacket" }
+          ];
+        }
+
+        if (!itineraryData.packingList) {
+          itineraryData.packingList = [
+            { name: "Passport/ID", icon: "fa-id-card" },
+            { name: "Swimwear", icon: "fa-umbrella-beach" },
+            { name: "Sunscreen", icon: "fa-sun" },
+            { name: "Comfortable shoes", icon: "fa-shoe-prints" },
+            { name: "Camera", icon: "fa-camera" },
+            { name: "Medications", icon: "fa-briefcase-medical" },
+            { name: "Travel adapter", icon: "fa-plug" },
+            { name: "Light jacket", icon: "fa-jacket" }
+          ];
+        }
+
+        // Render itinerary
+        const itineraryContainer = document.getElementById('itinerary-days');
+        itineraryContainer.innerHTML = '';
       
-      sampleItinerary.forEach(day => {
+      itineraryData.days.forEach(day => {
         const dayElement = document.createElement('div');
         dayElement.className = 'p-6';
         dayElement.innerHTML = `
@@ -254,7 +283,7 @@
       const packingContainer = document.getElementById('packing-list');
       packingContainer.innerHTML = '';
       
-      packingItems.forEach(item => {
+      itineraryData.packingList.forEach(item => {
         const itemElement = document.createElement('div');
         itemElement.className = 'packing-item bg-gray-100 dark:bg-gray-600 p-4 rounded-lg flex items-center';
         itemElement.innerHTML = `
@@ -267,6 +296,16 @@
       // Show results with animation
       document.getElementById('itinerary-results').classList.remove('hidden');
       document.getElementById('itinerary-results').scrollIntoView({ behavior: 'smooth' });
+
+      } catch (error) {
+        alert('Error: ' + error.message);
+        console.error(error);
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-magic mr-2"></i> Generate AI Itinerary';
+      }
+
+
     });
   </script>
 </body>
