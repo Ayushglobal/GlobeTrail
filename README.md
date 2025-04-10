@@ -12,6 +12,7 @@ The application consists of multiple interconnected pages including:
 - **Itinerary Builder**: An interactive module for creating and managing personalized travel itineraries with activity drag-and-drop functionality.
 - **Gallery**: A dynamic image gallery featuring various destinations.
 - **Login**: A simple login interface for users to manage their accounts.
+  
 
 ## Installation
 
@@ -56,12 +57,16 @@ The project uses the following dependencies defined within its HTML:
 The project consists of the following files:
 
 ```plaintext
+
 globeTrail-ai/
+├── app.py
+├── users.db           # (Will be auto-created by app.py)
 ├── index.html         # Home page of the application
 ├── destinations.html  # Page displaying popular travel destinations
 ├── itinerary.html     # Itinerary builder that allows drag-and-drop activities
 ├── gallery.html       # Dynamic gallery for viewing destination images
 └── login.html         # User login page
+
 ```
 
 Each HTML file contains custom styling and JavaScript for dynamic behavior, structured to maintain component separation for easier updates and maintenance.
