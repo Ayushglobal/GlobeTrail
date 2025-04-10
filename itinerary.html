@@ -87,6 +87,12 @@
             <label class="block text-gray-700 dark:text-gray-300 mb-2">Budget (₹)</label>
             <input type="number" id="budget" placeholder="15000" class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:text-white">
           </div>
+          <!-- Number of Days -->
+<div>
+  <label for="days" class="block mb-1 text-sm font-medium text-gray-600 dark:text-gray-300">Trip Duration (in days)</label>
+  <input type="number" id="days" name="days" min="1" max="30" class="w-full px-3 py-2 border rounded-md focus:outline-none dark:bg-gray-700 dark:text-white" required>
+</div>
+
         </div>
         
         <div class="mt-6">
@@ -135,134 +141,99 @@
       themeToggle.classList.toggle('bg-gray-200', !isDark);
       themeToggle.classList.toggle('bg-gray-700', isDark);
     });
-
-    // Initialize theme
+  
+    // Initialize theme on page load
     if (localStorage.getItem('theme') === 'dark' || 
         (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
       document.documentElement.classList.add('dark');
       themeToggle.classList.replace('bg-gray-200', 'bg-gray-700');
     }
-
+  
     // AI Itinerary Generation
-    document.getElementById('generate-btn').addEventListener('click', async function() {
-      const btn = this;
-      const origin = document.getElementById('origin').value;
-      const destination = document.getElementById('destination').value;
-      const startDate = document.getElementById('start-date').value;
-      const budget = document.getElementById('budget').value;
-      const preferences = document.getElementById('preferences').value;
-      
-      if (!destination) {
-        alert('Please enter a destination');
-        return;
-      }
+    document.getElementById('generate-btn').addEventListener('click', async function () {
+    const origin = document.getElementById('origin').value || 'Your City';
+    const destination = document.getElementById('destination').value || 'Dream Destination';
+    const budget = document.getElementById('budget').value || '15000';
+    const preferences = document.getElementById('preferences').value || 'Adventure, culture, relaxation';
+    const days = document.getElementById('days').value || '3';
 
-      // Show loading state
-      btn.disabled = true;
-      btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Generating...';
-      
-      try {
-        // Call backend API
-        const response = await fetch('http://localhost:5000/generate-itinerary', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            origin,
-            destination, 
-            startDate,
-            budget,
-            preferences
-          })
-        });
+    const userInput = `I want to travel from ${origin} to ${destination} for ${days} days with a budget of ₹${budget}. I prefer ${preferences}.`;
 
-        const data = await response.json();
-        
-        if (data.status !== 'success') {
-          throw new Error(data.message || 'Failed to generate itinerary');
-        }
+    try {
+      const res = await fetch('http://localhost:5000/generate-itinerary', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ input: userInput })
+      });
 
-        // Display the inputs
-        document.getElementById('display-origin').textContent = origin || 'Your City';
+      const data = await res.json();
+
+      if (data.status === 'success') {
+        document.getElementById('itinerary-results').classList.remove('hidden');
+        document.getElementById('display-origin').textContent = origin;
         document.getElementById('display-destination').textContent = destination;
-        
-        // Store destination for gallery
-        localStorage.setItem('selectedDestination', destination);
-        
-        // Parse response data
-        const itineraryData = JSON.parse(data.data);
-        
-        // Sample itinerary data structure if API fails
-        if (!itineraryData.days) {
-          itineraryData.days = [
-            {
-              day: 1,
-              title: "Arrival & Exploration",
-              activities: [
-                "Check into your hotel/resort",
-                "Local market visit for souvenirs",
-                "Sunset at the beach"
-              ]
-            },
-            {
-              day: 2,
-              title: "Adventure Day",
-              activities: [
-                "Morning water sports",
-                "Afternoon cultural tour",
-                "Evening cruise with dinner"
-              ]
-            }
-          ];
-        }
 
-        // Ensure packing list is available
-        if (!itineraryData.packingList) {
-          itineraryData.packingList = [
-            { name: "Passport/ID", icon: "fa-id-card" },
-            { name: "Swimwear", icon: "fa-umbrella-beach" },
-            { name: "Sunscreen", icon: "fa-sun" },
-            { name: "Comfortable shoes", icon: "fa-shoe-prints" },
-            { name: "Camera", icon: "fa-camera" },
-            { name: "Medications", icon: "fa-briefcase-medical" },
-            { name: "Travel adapter", icon: "fa-plug" },
-            { name: "Light jacket", icon: "fa-jacket" }
-          ];
-        }
+        // Parse and inject response HTML
+        document.getElementById('itinerary-days').innerHTML = data.data;
 
-        // Ensure packing list is available
-        if (!itineraryData.packingList) {
-          itineraryData.packingList = [
-            { name: "Passport/ID", icon: "fa-id-card" },
-            { name: "Swimwear", icon: "fa-umbrella-beach" },
-            { name: "Sunscreen", icon: "fa-sun" },
-            { name: "Comfortable shoes", icon: "fa-shoe-prints" },
-            { name: "Camera", icon: "fa-camera" },
-            { name: "Medications", icon: "fa-briefcase-medical" },
-            { name: "Travel adapter", icon: "fa-plug" },
-            { name: "Light jacket", icon: "fa-jacket" }
-          ];
-        }
+        // Optionally extract packing list into separate box
+        const packingStart = data.data.indexOf('<h5');
+        const packingHTML = data.data.substring(packingStart);
+        document.getElementById('packing-list').innerHTML = packingHTML;
 
-        if (!itineraryData.packingList) {
-          itineraryData.packingList = [
-            { name: "Passport/ID", icon: "fa-id-card" },
-            { name: "Swimwear", icon: "fa-umbrella-beach" },
-            { name: "Sunscreen", icon: "fa-sun" },
-            { name: "Comfortable shoes", icon: "fa-shoe-prints" },
-            { name: "Camera", icon: "fa-camera" },
-            { name: "Medications", icon: "fa-briefcase-medical" },
-            { name: "Travel adapter", icon: "fa-plug" },
-            { name: "Light jacket", icon: "fa-jacket" }
-          ];
-        }
+      } else {
+        alert('Failed to generate itinerary: ' + data.message);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Something went wrong. Please try again.');
+    }
+  });
+    document.getElementById('generate-btn').addEventListener('click', function () {
+      const origin = document.getElementById('origin').value || 'Your City';
+      const destination = document.getElementById('destination').value || 'Dream Destination';
+      const budget = document.getElementById('budget').value || '15000';
+      const preferences = document.getElementById('preferences').value;
+  
+      // Display values
+      document.getElementById('display-origin').textContent = origin;
+      document.getElementById('display-destination').textContent = destination;
+  
+      const apiKey = "AIzaSyB1HGZdMkukL0jqqdJa8rWCbQ5eBqU7b7E";
 
-        // Render itinerary
-        const itineraryContainer = document.getElementById('itinerary-days');
-        itineraryContainer.innerHTML = '';
-      
-      itineraryData.days.forEach(day => {
+async function fetchItineraryFromGemini(origin, destination, budget, preferences, days) {
+  const prompt = `
+Plan a ${days}-day travel itinerary from ${origin} to ${destination}. 
+My budget is ₹${budget}, and I prefer: ${preferences || "no specific preferences"}.
+
+For each day, include:
+- A title
+- 2–3 interesting activities
+Also, provide a recommended packing list based on the location and climate.
+`;
+
+  const response = await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=" + apiKey, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      contents: [{ parts: [{ text: prompt }] }]
+    })
+  });
+
+  const result = await response.json();
+  return result.candidates?.[0]?.content?.parts?.[0]?.text || "No plan generated.";
+}
+
+  
+      // Render itinerary
+      const itineraryContainer = document.getElementById('itinerary-days');
+      itineraryContainer.innerHTML = '';
+  
+      sampleItinerary.forEach(day => {
         const dayElement = document.createElement('div');
         dayElement.className = 'p-6';
         dayElement.innerHTML = `
@@ -278,12 +249,12 @@
         `;
         itineraryContainer.appendChild(dayElement);
       });
-
+  
       // Render packing list
       const packingContainer = document.getElementById('packing-list');
       packingContainer.innerHTML = '';
-      
-      itineraryData.packingList.forEach(item => {
+  
+      packingItems.forEach(item => {
         const itemElement = document.createElement('div');
         itemElement.className = 'packing-item bg-gray-100 dark:bg-gray-600 p-4 rounded-lg flex items-center';
         itemElement.innerHTML = `
@@ -292,21 +263,15 @@
         `;
         packingContainer.appendChild(itemElement);
       });
-
-      // Show results with animation
+  
+      // Show the itinerary section
       document.getElementById('itinerary-results').classList.remove('hidden');
+  
+      // Scroll to the result
       document.getElementById('itinerary-results').scrollIntoView({ behavior: 'smooth' });
-
-      } catch (error) {
-        alert('Error: ' + error.message);
-        console.error(error);
-      } finally {
-        btn.disabled = false;
-        btn.innerHTML = '<i class="fas fa-magic mr-2"></i> Generate AI Itinerary';
-      }
-
-
     });
+    
   </script>
+  
 </body>
 </html>
