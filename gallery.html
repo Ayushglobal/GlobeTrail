@@ -1,172 +1,262 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="light">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gallery | GlobeTrail AI</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-  <script>
-    tailwind.config = {
-      darkMode: 'class'
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Modern Gallery | GlobeTrail AI</title>
+
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <!-- Font Awesome -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+  <!-- AOS -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+  <!-- Lightbox2 -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/css/lightbox.min.css" rel="stylesheet" />
+
+  <style>
+    body {
+      background-color: #f5f7fa;
     }
-  </script>
+
+    .gallery-img {
+      border-radius: 15px;
+      transition: transform 0.3s ease-in-out;
+    }
+
+    .gallery-img:hover {
+      transform: scale(1.05) rotateZ(1deg);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+    }
+
+    .upload-btn {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      z-index: 1050;
+    }
+
+    .card-overlay {
+      position: absolute;
+      bottom: 0;
+      background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
+      color: white;
+      width: 100%;
+      padding: 1rem;
+      border-radius: 0 0 15px 15px;
+    }
+
+    .upload-preview {
+      margin-top: 1rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .upload-preview img {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 10px;
+      border: 2px solid #007bff;
+    }
+  </style>
 </head>
-<body class="bg-gray-50 dark:bg-gray-900">
-  <!-- Navigation Bar -->
-  <nav class="bg-white dark:bg-gray-800 shadow-md">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex justify-between h-16">
-        <div class="flex items-center">
-          <span class="text-xl font-bold text-blue-600 dark:text-blue-400">GlobeTrail AI</span>
-          <button id="theme-toggle" class="ml-4 p-2 rounded-full bg-gray-200 dark:bg-gray-700">
-            <i class="fas fa-moon dark:hidden"></i>
-            <i class="fas fa-sun hidden dark:block"></i>
-          </button>
-        </div>
-        <div class="hidden md:flex items-center space-x-8">
-          <a href="index.html" class="text-gray-700 dark:text-gray-300 hover:text-blue-600">Home</a>
-          <a href="destinations.html" class="text-gray-700 dark:text-gray-300 hover:text-blue-600">Destinations</a>
-          <a href="itinerary.html" class="text-gray-700 dark:text-gray-300 hover:text-blue-600">Itinerary</a>
-          <a href="gallery.html" class="text-blue-600 dark:text-blue-400 font-medium">Gallery</a>
-          <a href="login.html" class="text-gray-700 dark:text-gray-300 hover:text-blue-600">Login</a>
-        </div>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
+  <div class="container">
+    <a class="navbar-brand fw-bold" href="#">GlobeTrail AI</a>
+    <div class="collapse navbar-collapse">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link" href="Home.html">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="destinations.html">Destinations</a></li>
+        <li class="nav-item"><a class="nav-link" href="itinerary.html">Itinerary</a></li>
+        <li class="nav-item"><a class="nav-link active" href="#">Gallery</a></li>
+        <li class="nav-item"><a class="nav-link" href="login.html">Login</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero Section -->
+<header class="bg-primary text-white text-center py-5">
+  <h1 class="display-5 fw-bold">Traveler's Gallery</h1>
+  <p class="lead">Explore stories and experiences from wanderers around the globe.</p>
+</header>
+
+<!-- Gallery Grid -->
+<div class="container py-5">
+  <div class="row g-4" id="gallery-grid">
+    <!-- Example Gallery Item -->
+    <div class="col-sm-6 col-md-4 col-lg-3" data-aos="zoom-in">
+      <div class="position-relative">
+        <a href="https://images.pexels.com/photos/2402257/pexels-photo-2402257.jpeg" data-lightbox="gallery" data-title="Aga Khan Palace - Pune">
+          <img src="https://images.pexels.com/photos/2402257/pexels-photo-2402257.jpeg" class="img-fluid gallery-img" alt="Aga Khan Palace">
+          <div class="card-overlay">
+            <h6 class="mb-0">Aga Khan Palace</h6>
+            <small>Pune</small>
+          </div>
+        </a>
       </div>
     </div>
-  </nav>
 
-  <!-- Main Content -->
-  <section class="py-12">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <h1 class="text-3xl font-bold mb-8 dark:text-white">Gallery</h1>
-      
-      <div class="mb-6">
-        <input type="text" id="location-search" placeholder="Enter destination (e.g. Pune)" 
-               class="w-full md:w-1/2 p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-      </div>
-      
-      <div class="relative overflow-hidden h-96 mb-8">
-        <div class="flex h-full transition-transform duration-500 ease-in-out" id="image-slider">
-          <!-- Images will be loaded here by JavaScript -->
-        </div>
-        <button id="prev-btn" class="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 dark:bg-gray-700/80 p-2 rounded-full shadow-md hover:bg-white dark:hover:bg-gray-600">
-          <i class="fas fa-chevron-left text-gray-800 dark:text-white"></i>
-        </button>
-        <button id="next-btn" class="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 dark:bg-gray-700/80 p-2 rounded-full shadow-md hover:bg-white dark:hover:bg-gray-600">
-          <i class="fas fa-chevron-right text-gray-800 dark:text-white"></i>
-        </button>
-      </div>
-
-      <script>
-        // Theme toggle functionality
-        const themeToggle = document.getElementById('theme-toggle');
-        if (themeToggle) {
-          themeToggle.addEventListener('click', () => {
-            document.documentElement.classList.toggle('dark');
-            localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
-          });
-          
-          // Set initial theme
-          if (localStorage.getItem('theme') === 'dark' || 
-              (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-            document.documentElement.classList.add('dark');
-          }
-        }
-
-        // Image slider functionality
-        const locationImages = {
-          'pune': [
-            {url: 'https://images.pexels.com/photos/1295038/pexels-photo-1295038.jpeg', title: 'Shaniwar Wada'},
-            {url: 'https://images.pexels.com/photos/2402257/pexels-photo-2402257.jpeg', title: 'Aga Khan Palace'},
-            {url: 'https://images.pexels.com/photos/2402258/pexels-photo-2402258.jpeg', title: 'Sinhagad Fort'}
-          ],
-          'default': [
-            {url: 'https://images.pexels.com/photos/994605/pexels-photo-994605.jpeg', title: 'Maldives Beach'},
-            {url: 'https://images.pexels.com/photos/417173/pexels-photo-417173.jpeg', title: 'Swiss Alps'},
-            {url: 'https://images.pexels.com/photos/374710/pexels-photo-374710.jpeg', title: 'New York City'}
-          ]
-        };
-
-        let currentSlide = 0;
-        let autoSlideInterval;
-
-        document.addEventListener('DOMContentLoaded', () => {
-          const slider = document.getElementById('image-slider');
-          const prevBtn = document.getElementById('prev-btn');
-          const nextBtn = document.getElementById('next-btn');
-          const searchInput = document.getElementById('location-search');
-
-          if (!slider || !prevBtn || !nextBtn || !searchInput) return;
-
-          function loadImages(location) {
-            clearInterval(autoSlideInterval);
-            const images = locationImages[location.toLowerCase()] || locationImages['default'];
-            slider.innerHTML = '';
-            
-            images.forEach(img => {
-              const slide = document.createElement('div');
-              slide.className = 'min-w-full h-full flex-shrink-0 relative';
-              slide.innerHTML = `
-                <img src="${img.url}" alt="${img.title}" class="w-full h-full object-cover">
-                <div class="absolute bottom-0 left-0 right-0 bg-black/50 text-white p-4">
-                  <h3 class="text-xl font-bold">${img.title}</h3>
-                </div>
-              `;
-              slider.appendChild(slide);
-            });
-            
-            currentSlide = 0;
-            updateSlider();
-            startAutoSlide();
-          }
-
-          function updateSlider() {
-            slider.style.transform = `translateX(-${currentSlide * 100}%)`;
-          }
-
-          function startAutoSlide() {
-            autoSlideInterval = setInterval(() => {
-              currentSlide = (currentSlide < slider.children.length - 1) ? currentSlide + 1 : 0;
-              updateSlider();
-            }, 5000);
-          }
-
-          // Event listeners
-          prevBtn.addEventListener('click', () => {
-            clearInterval(autoSlideInterval);
-            currentSlide = (currentSlide > 0) ? currentSlide - 1 : slider.children.length - 1;
-            updateSlider();
-            startAutoSlide();
-          });
-
-          nextBtn.addEventListener('click', () => {
-            clearInterval(autoSlideInterval);
-            currentSlide = (currentSlide < slider.children.length - 1) ? currentSlide + 1 : 0;
-            updateSlider();
-            startAutoSlide();
-          });
-
-          searchInput.addEventListener('input', (e) => {
-            loadImages(e.target.value);
-          });
-
-          // Initialize
-          loadImages('default');
-        });
-      </script>
-    </div>
-  </section>
-
-  <!-- Footer -->
-  <footer class="bg-gray-800 text-white py-12">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-        <div>
-          <h3 class="text-xl font-bold mb-4">GlobeTrail AI</h3>
-          <p class="text-gray-400">Making travel planning effortless and fun.</p>
-        </div>
+    <!-- More Images -->
+    <div class="col-sm-6 col-md-4 col-lg-3" data-aos="zoom-in" data-aos-delay="100">
+      <div class="position-relative">
+        <a href="https://images.pexels.com/photos/994605/pexels-photo-994605.jpeg" data-lightbox="gallery" data-title="Maldives Beach">
+          <img src="https://images.pexels.com/photos/994605/pexels-photo-994605.jpeg" class="img-fluid gallery-img" alt="Maldives Beach">
+          <div class="card-overlay">
+            <h6 class="mb-0">Maldives Escape</h6>
+            <small>Beach Paradise</small>
+          </div>
+        </a>
       </div>
     </div>
-  </footer>
+
+    <div class="col-sm-6 col-md-4 col-lg-3" data-aos="zoom-in" data-aos-delay="200">
+      <div class="position-relative">
+        <a href="https://images.pexels.com/photos/374710/pexels-photo-374710.jpeg" data-lightbox="gallery" data-title="New York Vibes">
+          <img src="https://images.pexels.com/photos/374710/pexels-photo-374710.jpeg" class="img-fluid gallery-img" alt="NYC">
+          <div class="card-overlay">
+            <h6 class="mb-0">New York Vibes</h6>
+            <small>USA</small>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- User Uploaded Gallery -->
+<div class="container">
+  <h4 class="text-center fw-semibold mt-5 mb-4">Your Uploads</h4>
+  <div class="row g-4" id="userGalleryGrid"></div>
+</div>
+
+<!-- Upload Button -->
+<button class="btn btn-primary btn-lg rounded-circle upload-btn" data-bs-toggle="modal" data-bs-target="#uploadModal">
+  <i class="fas fa-plus"></i>
+</button>
+
+<!-- Upload Modal -->
+<div class="modal fade" id="uploadModal" tabindex="-1" aria-labelledby="uploadModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title"><i class="fas fa-upload me-2"></i>Share Your Travel Photo</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <form>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label class="form-label">Destination Name</label>
+            <input type="text" class="form-control" placeholder="e.g., Paris">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Short Caption</label>
+            <input type="text" class="form-control" placeholder="Your story or memory">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Upload Photo</label>
+            <input type="file" class="form-control">
+          </div>
+          <div class="upload-preview" id="uploadPreview"></div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-success"><i class="fas fa-paper-plane me-2"></i>Post</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer class="bg-dark text-center text-white py-4 mt-5">
+  <div class="container">
+    <p class="mb-0">&copy; 2025 GlobeTrail AI. All rights reserved.</p>
+  </div>
+</footer>
+
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/js/lightbox.min.js"></script>
+
+<script>
+  AOS.init();
+
+  const uploadInput = document.querySelector('input[type="file"]');
+  const uploadPreview = document.getElementById('uploadPreview');
+  const userGalleryGrid = document.getElementById('userGalleryGrid');
+
+  uploadInput.addEventListener('change', function (e) {
+    uploadPreview.innerHTML = '';
+    const files = e.target.files;
+    for (let file of files) {
+      const reader = new FileReader();
+      reader.onload = function (event) {
+        const img = document.createElement('img');
+        img.src = event.target.result;
+        uploadPreview.appendChild(img);
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+
+  document.querySelector('.modal-footer .btn-success').addEventListener('click', function (e) {
+    e.preventDefault();
+    const destName = document.querySelector('input[placeholder="e.g., Paris"]').value;
+    const caption = document.querySelector('input[placeholder="Your story or memory"]').value;
+    const fileInput = document.querySelector('input[type="file"]');
+
+    if (fileInput.files.length === 0) return;
+
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      const col = document.createElement('div');
+      col.className = 'col-sm-6 col-md-4 col-lg-3';
+      col.innerHTML = `
+        <div class="position-relative" data-aos="fade-up">
+          <a href="${e.target.result}" data-lightbox="gallery" data-title="${caption}">
+            <img src="${e.target.result}" class="img-fluid gallery-img" alt="${destName}">
+            <div class="card-overlay">
+              <h6 class="mb-0">${destName}</h6>
+              <small>${caption}</small>
+            </div>
+          </a>
+        </div>
+      `;
+      userGalleryGrid.appendChild(col);
+
+      fileInput.value = '';
+      document.querySelector('input[placeholder="e.g., Paris"]').value = '';
+      document.querySelector('input[placeholder="Your story or memory"]').value = '';
+      uploadPreview.innerHTML = '';
+      const modal = bootstrap.Modal.getInstance(document.getElementById('uploadModal'));
+      modal.hide();
+
+      showToast("Photo uploaded successfully!");
+    };
+    reader.readAsDataURL(fileInput.files[0]);
+  });
+
+  function showToast(message) {
+    const toast = document.createElement('div');
+    toast.className = 'toast align-items-center text-white bg-success border-0 position-fixed bottom-0 end-0 m-4';
+    toast.setAttribute('role', 'alert');
+    toast.innerHTML = `
+      <div class="d-flex">
+        <div class="toast-body">${message}</div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+      </div>
+    `;
+    document.body.appendChild(toast);
+    const bsToast = new bootstrap.Toast(toast);
+    bsToast.show();
+    toast.addEventListener('hidden.bs.toast', () => toast.remove());
+  }
+</script>
 </body>
 </html>
