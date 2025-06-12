@@ -23,6 +23,99 @@
       color: #fff;
       overflow-x: hidden;
     }
+/* ==================== Updated Itinerary Section Styles ==================== */
+
+.itinerary-section {
+  margin-top: 18px;
+  padding: 16px 20px;
+  border-left: 4px solid #00b4d8;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 180, 216, 0.1);
+}
+
+.itinerary-section h4 {
+  font-size: 20px;
+  color: #00f7ff;
+  margin-top: 20px;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.itinerary-section p {
+  font-size: 14px;
+  color: #e0e0e0;
+  margin-bottom: 6px;
+  line-height: 1.6;
+}
+
+/* Checklist/Activities/Packing List */
+.checklist, .activities {
+  list-style: none;
+  padding-left: 0;
+  margin: 12px 0;
+}
+
+.checklist li, .activities li {
+  font-size: 14px;
+  color: #fff;
+  margin-bottom: 6px;
+  padding-left: 24px;
+  position: relative;
+  line-height: 1.6;
+}
+
+.checklist li::before {
+  content: "🎒";
+  position: absolute;
+  left: 0;
+}
+
+.activities li::before {
+  content: "🌄";
+  position: absolute;
+  left: 0;
+}
+
+/* Budget Highlight */
+.budget {
+  font-size: 15px;
+  font-weight: 500;
+  color: #2ECC71;
+  margin: 10px 0;
+  background: rgba(46, 204, 113, 0.1);
+  padding: 6px 12px;
+  border-left: 4px solid #2ECC71;
+  border-radius: 6px;
+  display: inline-block;
+}
+
+/* Divider if needed */
+.itinerary-divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.1);
+  margin: 20px 0;
+}
+.large-itinerary-box {
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 16px;
+  font-size: 16px;
+  color: #f8f8f8;
+  line-height: 1.75;
+  white-space: pre-wrap;
+  box-shadow: 0 8px 20px rgba(0, 180, 216, 0.25);
+  margin-top: 10px;
+  margin-bottom: 10px;
+  animation: fadeInItinerary 0.8s ease-in-out;
+}
+
+@keyframes fadeInItinerary {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+
 
     /* Navbar */
     .glass-navbar {
@@ -137,7 +230,7 @@
 
     .chat-container {
       width: 45%;
-      min-height: 580px;
+      min-height: 700px;
       background: rgba(255, 255, 255, 0.08);
       backdrop-filter: blur(15px);
       border-radius: 25px;
@@ -199,7 +292,7 @@
       background-color: #fff;
       border-radius: 50px;
       padding: 12px 18px;
-      margin-top: 20px;
+      margin-top: 240px;
       box-shadow: 0 8px 25px rgba(0, 180, 216, 0.35);
     }
 
@@ -353,163 +446,170 @@
   </div>
 
   <!-- JavaScript -->
-  <script>
-    const images = [
-     "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1350&q=80",  // Beautiful mountain range with lake
-     "https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1350&q=80",   // Tropical beach with palm trees and turquoise water
-      "https://images.unsplash.com/photo-1526772662000-3f88f10405ff",
-      "https://images.unsplash.com/photo-1501785888041-af3ef285b470"
-    ];
+<script>
+  // Image carousel logic
+  const images = [
+    "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1350&q=80",
+    "https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1350&q=80",
+    "https://images.unsplash.com/photo-1526772662000-3f88f10405ff",
+    "https://images.unsplash.com/photo-1501785888041-af3ef285b470"
+  ];
 
-    let index = 0;
-    const carouselImage = document.getElementById("carousel-image");
+  let index = 0;
+  const carouselImage = document.getElementById("carousel-image");
 
-    setInterval(() => {
-      // Fade out
-      carouselImage.style.opacity = 0;
+  setInterval(() => {
+    carouselImage.style.opacity = 0;
+    setTimeout(() => {
+      index = (index + 1) % images.length;
+      carouselImage.src = images[index];
+      carouselImage.style.opacity = 1;
+    }, 1000);
+  }, 5000);
 
-      setTimeout(() => {
-        index = (index + 1) % images.length;
-        carouselImage.src = images[index];
-        // Fade in
-        carouselImage.style.opacity = 1;
-      }, 1000); // match the CSS transition duration
-    }, 5000);
+  // Chat functionality
+  const chatBox = document.getElementById("chat-box");
+  const sendButton = document.getElementById("send-button");
+  const userInput = document.getElementById("user-input");
 
-    const chatBox = document.getElementById("chat-box");
-    const sendButton = document.getElementById("send-button");
-    const userInput = document.getElementById("user-input");
+  // 🧠 Function to format plain text into bullet points
+  function formatAsBullets(text) {
+  const lines = text.split("\n").filter(line => line.trim() !== "");
+  return lines.map(line => {
+    const content = line.replace(/^[-→•*]+\s*/, "");  // Remove bullet-like prefixes
+    return `<div><strong>• ${content}</strong></div>`;  // Add dot + bold
+  }).join("");
+}
 
-    function appendMessage(content, sender) {
-      const wrapper = document.createElement("div");
-      wrapper.className = sender === "ai" ? "bot-message" : "user-message";
 
+  // 📦 Append a new chat message to the chat box
+  function appendMessage(content, sender) {
+    const wrapper = document.createElement("div");
+    wrapper.className = sender === "ai" ? "bot-message left" : "user-message right";
+
+    const avatar = document.createElement("img");
+    avatar.src = sender === "ai"
+      ? "https://cdn-icons-png.flaticon.com/512/4712/4712109.png"
+      : "https://cdn-icons-png.flaticon.com/512/1077/1077012.png";
+    avatar.alt = sender === "ai" ? "Bot" : "User";
+
+    const message = document.createElement("div");
+    message.className = "message";
+
+    // 💡 Apply bullet formatting and font styling only for bot messages
+    if (sender === "ai") {
+      content = formatAsBullets(content);
+      message.style.fontSize = "1.08rem"; // 👈 Change font size here
+      message.style.lineHeight = "1.7";    // 👈 Line height spacing
+    }
+
+    message.innerHTML = content;
+
+    wrapper.appendChild(avatar);
+    wrapper.appendChild(message);
+    chatBox.appendChild(wrapper);
+    chatBox.scrollTo({ top: chatBox.scrollHeight, behavior: 'smooth' });
+  }
+
+  // Show "Typing..." simulation
+  function showTyping() {
+    appendMessage('<em>Typing...</em>', 'ai');
+  }
+
+  // Remove the last typing message
+  function removeTyping() {
+    const messages = chatBox.querySelectorAll(".bot-message");
+    if (messages.length > 0) {
+      const last = messages[messages.length - 1];
+      if (last.querySelector(".message").innerHTML === '<em>Typing...</em>') {
+        chatBox.removeChild(last);
+      }
+    }
+  }
+
+  let conversationHistory = [];
+
+  async function sendMessage() {
+    const input = userInput.value.trim();
+    if (!input) return;
+
+    appendMessage(input, "user");
+    conversationHistory.push({ role: "user", content: input });
+    userInput.value = "";
+    userInput.disabled = true;
+    sendButton.disabled = true;
+    showTyping();
+
+    try {
+      const res = await fetch("http://localhost:5000/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ messages: conversationHistory }),
+      });
+
+      const data = await res.json();
+      removeTyping();
+
+      if (data.status === "success") {
+        appendMessage(data.reply, "ai");
+        conversationHistory.push({ role: "assistant", content: data.reply });
+      } else {
+        appendMessage("❌ Sorry, I couldn't understand that.", "ai");
+      }
+    } catch (err) {
+      removeTyping();
+      appendMessage("⚠️ Server error. Please try again later.", "ai");
+    }
+
+    userInput.disabled = false;
+    sendButton.disabled = false;
+    userInput.focus();
+  }
+
+  sendButton.addEventListener("click", sendMessage);
+  userInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") sendMessage();
+  });
+
+  // Initial welcome message with typing animation
+  window.onload = () => {
+    chatBox.innerHTML = "";
+    const welcome = "👋 Welcome to GlobeTrail AI!";
+    const intro = `Hi! I'm your travel assistant 🤖\n\nAsk me anything like:\n• What to do in Lonavla?\n• Help me write a poem\n• Suggest food places in Goa\n• Or just chat with me!`;
+
+    function typeLine(text, callback) {
+      let i = 0;
+      const typingSpeed = 40;
+      const output = document.createElement("div");
+      output.className = "bot-message left";
       const avatar = document.createElement("img");
-      avatar.src = sender === "ai"
-        ? "https://cdn-icons-png.flaticon.com/512/4712/4712109.png"
-        : "https://cdn-icons-png.flaticon.com/512/1077/1077012.png";
-      avatar.alt = sender === "ai" ? "Bot" : "User";
+      avatar.src = "https://cdn-icons-png.flaticon.com/512/4712/4712109.png";
+      avatar.alt = "Bot";
+      const bubble = document.createElement("div");
+      bubble.className = "message";
+      bubble.style.fontSize = "1.05rem"; // 👈 Font size for typing message
+      bubble.style.lineHeight = "1.6";
 
-      const message = document.createElement("div");
-      message.className = "message";
-      message.innerHTML = content;
+      output.appendChild(avatar);
+      output.appendChild(bubble);
+      chatBox.appendChild(output);
 
-      wrapper.appendChild(avatar);
-      wrapper.appendChild(message);
-      chatBox.appendChild(wrapper);
-
-      // Scroll to bottom
-      chatBox.scrollTo({
-        top: chatBox.scrollHeight,
-        behavior: 'smooth'
-      });
-    }
-
-    // Show typing indicator (a simple message)
-    function showTyping() {
-      appendMessage('<em>Typing...</em>', 'ai');
-    }
-
-    // Remove last AI message if it is typing indicator
-    function removeTyping() {
-      const messages = chatBox.querySelectorAll(".bot-message");
-      if (messages.length > 0) {
-        const last = messages[messages.length - 1];
-        if (last.querySelector(".message").innerHTML === '<em>Typing...</em>') {
-          chatBox.removeChild(last);
-        }
+      function type() {
+        bubble.innerHTML += text.charAt(i++);
+        chatBox.scrollTo({ top: chatBox.scrollHeight, behavior: 'smooth' });
+        if (i < text.length) setTimeout(type, typingSpeed);
+        else callback && callback();
       }
+      type();
     }
 
-    async function sendMessage() {
-      const input = userInput.value.trim();
-      if (!input) return;
-
-      // Append user message
-      appendMessage(input, "user");
-
-      // Clear input and disable while waiting
-      userInput.value = "";
-      userInput.disabled = true;
-      sendButton.disabled = true;
-
-      // Show typing indicator
-      showTyping();
-
-      try {
-        const res = await fetch("http://localhost:5000/generate-itinerary", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ input }),
-        });
-
-        const data = await res.json();
-
-        // Remove typing indicator
-        removeTyping();
-
-        if (data.status === "success") {
-          appendMessage(data.data.replace(/\n/g, "<br>"), "ai");
-        } else {
-          appendMessage("❌ Oops! Something went wrong.", "ai");
-        }
-      } catch (error) {
-        removeTyping();
-        appendMessage("⚠️ Couldn't connect to AI service.", "ai");
-      }
-
-      // Re-enable input and focus
-      userInput.disabled = false;
-      sendButton.disabled = false;
-      userInput.focus();
-    }
-
-    sendButton.addEventListener("click", sendMessage);
-    userInput.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") sendMessage();
+    typeLine(welcome, () => {
+      setTimeout(() => {
+        appendMessage(intro, "ai");
+      }, 700);
     });
-
-    // Initial welcome message typed out once page loads
-    window.onload = () => {
-      // Clear default welcome message already in HTML
-      chatBox.innerHTML = "";
-
-      const welcome = "👋 Welcome to GlobeTrail AI!";
-      const intro = `Hey there! I'm your personal travel assistant 🤖\n\nTell me your starting city, how many days you have, and what kind of trip you’re dreaming of—adventure, culture, food, nature?\n\nLet's build your itinerary together!`;
-
-      function typeLine(text, callback) {
-        let i = 0;
-        const typingSpeed = 40;
-        const output = document.createElement("div");
-        output.className = "bot-message";
-        const avatar = document.createElement("img");
-        avatar.src = "https://cdn-icons-png.flaticon.com/512/4712/4712109.png";
-        avatar.alt = "Bot";
-        const bubble = document.createElement("div");
-        bubble.className = "message";
-        output.appendChild(avatar);
-        output.appendChild(bubble);
-        chatBox.appendChild(output);
-
-        function type() {
-          bubble.innerHTML += text.charAt(i++);
-          chatBox.scrollTo({
-            top: chatBox.scrollHeight,
-            behavior: 'smooth'
-          });
-          if (i < text.length) setTimeout(type, typingSpeed);
-          else callback && callback();
-        }
-        type();
-      }
-
-      typeLine(welcome, () => {
-        setTimeout(() => {
-          appendMessage(intro.replace(/\n/g, "<br>"), "ai");
-        }, 700);
-      });
-    };
-  </script>
+  };
+</script>
 
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>

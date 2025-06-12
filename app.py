@@ -8,29 +8,27 @@ app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 CORS(app)
 
-# Gemini API setup
+# Setup Gemini API
 GEMINI_API_KEY = "AIzaSyB1HGZdMkukL0jqqdJa8rWCbQ5eBqU7b7E"
 genai.configure(api_key=GEMINI_API_KEY)
 model = genai.GenerativeModel("gemini-1.5-flash")
 
-# Initialize DB
+# Initialize SQLite Database
 def init_db():
     conn = sqlite3.connect('users.db')
     c = conn.cursor()
-    c.execute('''
-        CREATE TABLE IF NOT EXISTS users (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            name TEXT NOT NULL,
-            email TEXT UNIQUE NOT NULL,
-            password TEXT NOT NULL
-        )
-    ''')
+    c.execute('''CREATE TABLE IF NOT EXISTS users (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL,
+        email TEXT UNIQUE NOT NULL,
+        password TEXT NOT NULL
+    )''')
     conn.commit()
     conn.close()
 
 init_db()
 
-# 1. Signup route
+# === Auth Routes ===
 @app.route('/signup', methods=['POST'])
 def signup():
     name = request.form.get('name')
@@ -53,7 +51,6 @@ def signup():
     session['user'] = email
     return redirect('/itinerary')
 
-# 2. Login route
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -71,55 +68,112 @@ def login():
             return redirect('/itinerary')
         else:
             return redirect('/login?message=Invalid credentials. Please try again.')
-
     return render_template('login.html')
 
-# 3. Itinerary route
+@app.route('/signup-form')
+def signup_form():
+    return render_template('signup.html')
+
+# === Protected Itinerary Page ===
 @app.route('/itinerary')
 def itinerary():
     if 'user' in session:
         return render_template('itinerary.html')
     return redirect('/login')
 
-# 4. Signup form page (HTML already styled)
-@app.route('/signup-form')
-def signup_form():
-    return render_template('signup.html')
-
-# 5. Home
+# === Homepage ===
 @app.route('/')
 def home():
     return render_template('index.html')
 
-# 6. Generate itinerary (AI)
+# === Itinerary Generation ===
 @app.route('/generate-itinerary', methods=['POST'])
 def generate_itinerary():
+    data = request.get_json()
+
+    destination = data.get("destination", "").strip().lower()
+    source = data.get("source", "").strip().lower()
+    people = data.get("people", "").strip().lower()
+    budget = int(data.get("budget", "0"))
+    preferences = data.get("preferences", "").strip().lower()
+
+    if not destination or not source or not people or not budget:
+        return jsonify({
+            "status": "error",
+            "message": "Incomplete information provided"
+        })
+
+    if destination == "lonavla":
+        itinerary = f"""
+<b>🌄 Lonavla Itinerary (From {source.title()} | {people.title()} | ₹{budget})</b><br><br>
+
+<b>Day 1:</b><br>
+- Depart from {source.title()} early morning (by local train or cab)<br>
+- Visit Bhushi Dam and enjoy monsoon views ☔<br>
+- Lunch at German Bakery Wunderbar<br>
+- Explore Tiger’s Leap and Rajmachi Point 🌄<br>
+- Check-in to a budget-friendly homestay/hotel (₹1000-1500)<br>
+- Dinner at Mapro Garden Restaurant<br><br>
+
+<b>Day 2:</b><br>
+- Breakfast at hotel<br>
+- Visit Karla & Bhaja Caves (Auto from market area)<br>
+- Lunch at Rama Krishna Lonavla<br>
+- Relax at Lonavla Lake / do some light shopping<br>
+- Return to Pune by evening 🚆<br><br>
+
+<b>Total Cost Estimation:</b><br>
+- Travel: ₹500 (train) / ₹2000 (cab)<br>
+- Food: ₹800-1000<br>
+- Stay: ₹1000-1500<br>
+- Entry + Misc: ₹500<br><br>
+✅ <b>Estimated Total:</b> ₹3000 - ₹4500 only<br><br>
+<b>Tip:</b> Try chikki from Maganlal – it’s a Lonavla classic! 🍬
+"""
+        return jsonify({"status": "success", "data": itinerary})
+
+    return jsonify({
+        "status": "success",
+        "data": "Sorry! I don’t have a detailed itinerary for that destination yet. Please try another location or refine your query."
+    })
+
+@app.route("/chat", methods=["POST", "OPTIONS"])
+def chat():
+    if request.method == "OPTIONS":
+        return '', 200  # Handle CORS preflight
+
     try:
-        data = request.json
-        user_input = data.get('input', '')
+        data = request.get_json()
+        messages = data.get("messages", [])
 
-        prompt = f"""As a smart AI travel planner, create a detailed response with:
-        1. 3 suggested destinations (mark with ##)
-        2. A 3-day itinerary for the top recommendation (mark with ###)
-        3. Packing checklist (mark with ####)
-        4. Budget estimates in INR (mark with #####)
+        if not messages:
+            return jsonify({"status": "error", "message": "No messages provided."})
 
-        User request: "{user_input}"
-        """
+        # Correct format using plain dicts
+        history = [
+            {"role": msg["role"], "parts": [msg["content"]]}
+            for msg in messages[:-1]
+        ]
+        last_message = messages[-1]["content"]
 
-        response = model.generate_content(prompt)
-        formatted = format_response(response.text)
+        chat = model.start_chat(history=history)
+        response = chat.send_message(last_message)
 
-        return jsonify({'status': 'success', 'data': formatted})
+        return jsonify({
+            "status": "success",
+            "reply": response.text
+        })
+
     except Exception as e:
-        return jsonify({'status': 'error', 'message': str(e)}), 500
+        print("Chat error:", str(e))
+        return jsonify({
+            "status": "error",
+            "message": "Failed to generate response."
+        })
 
-def format_response(text):
-    text = text.replace('## ', '<h3 class="text-xl font-bold mt-6 mb-3">').replace('\n##', '</h3>')
-    text = text.replace('### ', '<h4 class="text-lg font-semibold mt-4 mb-2">').replace('\n###', '</h4>')
-    text = text.replace('#### ', '<h5 class="font-medium mt-3 mb-1">').replace('\n####', '</h5>')
-    text = text.replace('##### ', '<p class="text-blue-600 dark:text-blue-400 mt-2">').replace('\n#####', '</p>')
-    return text.replace('\n', '<br>')
 
+
+
+# === Run the Flask App ===
 if __name__ == '__main__':
-    app.run(port=5000, debug=True)
+    app.run(debug=True)
