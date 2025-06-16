@@ -327,6 +327,8 @@
   width: 350px;
   height: 450px;
   padding: 3rem 2.5rem;
+  transform-style: preserve-3d;
+  will-change: transform;
 }
 
 .card-glass:hover {
@@ -434,18 +436,24 @@
   color: #000;
   text-decoration: none;
 }
+.navbar.scrolled {
+  background-color: rgba(17, 17, 17, 0.9);
+  transition: background-color 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
 
 
     /* Explore Section */
     .explore {
-      background: url('https://static.vecteezy.com/system/resources/previews/016/313/475/non_2x/abstract-background-with-a-textured-world-map-contours-of-continents-and-islands-on-a-blue-background-vector.jpg') no-repeat center center / cover;
+  position: relative;
+  background: transparent;
+  padding: 7rem 2rem 8rem;
+  text-align: center;
+  color: #fff;
+  overflow: hidden;
+  
+}
 
-      padding: 7rem 2rem 8rem;
-      text-align: center;
-      position: relative;
-      color: #fff;
-      overflow: hidden;
-    }
     .explore::before {
       content: "";
       position: absolute;
@@ -453,6 +461,17 @@
       background: rgba(0,0,0,0.65);
       z-index: 0;
     }
+    .explore iframe.spline-earth {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  opacity: 0.5;
+  pointer-events: none;
+  filter: blur(0.5px);
+}
     .explore > div {
       position: relative;
       z-index: 1;
@@ -576,6 +595,7 @@
   <!-- Hero Section -->
   <section class="hero" aria-label="Hero Section">
     <div class="hero-content">
+      
       <h1 class="hero-title">Plan Your<br />Perfect Trip</h1>
       <div class="typing-subtitle" aria-live="polite"></div>
       <div class="glass-box">
@@ -646,11 +666,20 @@
 
   <!-- Explore Section -->
   <section class="explore" aria-label="Explore More Destinations">
-    <div>
-      <h2>Explore More Destinations</h2>
-      <p>Discover hidden gems and popular hotspots handpicked by travel experts and powered by AI insights.</p>
-    </div>
-  </section>
+  <!-- Spline Globe Background -->
+  <iframe src="https://my.spline.design/holographicearthwithdynamiclines-DoGQguDaylUnzjrA5UEK1Tgv/" 
+          frameborder="0" 
+          class="spline-earth" 
+          width="100%" 
+          height="100%"></iframe>
+
+  <!-- Foreground Content -->
+  <div>
+    <h2>Explore More Destinations</h2>
+    <p>Discover hidden gems and popular hotspots handpicked by travel experts and powered by AI insights.</p>
+  </div>
+</section>
+
 
   <!-- Footer -->
   <footer>
@@ -711,6 +740,17 @@
       }
     });
   </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.7.0/vanilla-tilt.min.js"></script>
+  <script>
+  VanillaTilt.init(document.querySelectorAll(".card-glass"), {
+    max: 15,
+    speed: 400,
+    glare: true,
+    "max-glare": 0.2,
+    perspective: 1000,
+    scale: 1.05
+  });
+</script>
 </body>
 </html>
 
