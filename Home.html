@@ -11,6 +11,9 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&display=swap" rel="stylesheet" />
+  <!-- AOS CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+
 
   <style>
     /* Reset & base */
@@ -593,24 +596,24 @@
   </nav>
 
   <!-- Hero Section -->
-  <section class="hero" aria-label="Hero Section">
-    <div class="hero-content">
-      
-      <h1 class="hero-title">Plan Your<br />Perfect Trip</h1>
-      <div class="typing-subtitle" aria-live="polite"></div>
-      <div class="glass-box">
-        <input type="text" placeholder="Where to?" aria-label="Destination input" />
-        <button type="button">Start Planning</button>
-      </div>
+  <section class="hero" aria-label="Hero Section" data-aos="fade-in">
+  <div class="hero-content" data-aos="fade-up" data-aos-delay="200">
+    <h1 class="hero-title" data-aos="fade-right" data-aos-delay="400">Plan Your<br />Perfect Trip</h1>
+    <div class="typing-subtitle" aria-live="polite" data-aos="fade-left" data-aos-delay="600"></div>
+    <div class="glass-box" data-aos="zoom-in" data-aos-delay="800">
+      <input type="text" placeholder="Where to?" aria-label="Destination input" />
+      <button type="button">Start Planning</button>
     </div>
-  </section>
+  </div>
+</section>
 
-  <section class="container" aria-label="Why Choose GlobeTrail AI">
-  <h2 class="section-title">Why Choose GlobeTrail AI</h2>
+  <!-- Why Choose Section -->
+<section class="container" aria-label="Why Choose GlobeTrail AI" data-aos="fade-up">
+  <h2 class="section-title" data-aos="fade-up">Why Choose GlobeTrail AI</h2>
   <div class="row gy-5">
 
-    <div class="col-md-4">
-      <div class="card-glass slide-left" tabindex="0" role="button" aria-pressed="false" aria-label="AI-Powered Planning details">
+    <div class="col-md-4" data-aos="fade-right">
+      <div class="card-glass" tabindex="0" role="button" aria-pressed="false" aria-label="AI-Powered Planning details">
         <div class="card-inner">
           <div class="card-front">
             <i class="fas fa-robot" aria-hidden="true"></i>
@@ -627,7 +630,7 @@
     </div>
 
     <div class="col-md-4">
-      <div class="card-glass slide-up" tabindex="0" role="button" aria-pressed="false" aria-label="24/7 Support details">
+      <div class="card-glass" tabindex="0" role="button" aria-pressed="false" aria-label="24/7 Support details">
         <div class="card-inner">
           <div class="card-front">
             <i class="fas fa-headset" aria-hidden="true"></i>
@@ -644,7 +647,7 @@
     </div>
 
     <div class="col-md-4">
-      <div class="card-glass slide-right" tabindex="0" role="button" aria-pressed="false" aria-label="Exclusive Deals details">
+      <div class="card-glass" tabindex="0" role="button" aria-pressed="false" aria-label="Exclusive Deals details">
         <div class="card-inner">
           <div class="card-front">
             <i class="fas fa-tags" aria-hidden="true"></i>
@@ -665,7 +668,7 @@
 
 
   <!-- Explore Section -->
-  <section class="explore" aria-label="Explore More Destinations">
+  <section class="explore" aria-label="Explore More Destinations" data-aos="fade-up">
   <!-- Spline Globe Background -->
   <iframe src="https://my.spline.design/holographicearthwithdynamiclines-DoGQguDaylUnzjrA5UEK1Tgv/" 
           frameborder="0" 
@@ -674,7 +677,7 @@
           height="100%"></iframe>
 
   <!-- Foreground Content -->
-  <div>
+  <div data-aos="zoom-in">
     <h2>Explore More Destinations</h2>
     <p>Discover hidden gems and popular hotspots handpicked by travel experts and powered by AI insights.</p>
   </div>
@@ -740,6 +743,15 @@
       }
     });
   </script>
+  <!-- AOS JS -->
+  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+  <script>
+    AOS.init({
+      duration: 1200, 
+      offset: 120
+      });
+  </script>
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.7.0/vanilla-tilt.min.js"></script>
   <script>
   VanillaTilt.init(document.querySelectorAll(".card-glass"), {
