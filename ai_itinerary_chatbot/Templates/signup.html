@@ -45,14 +45,8 @@
     }
 
     @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(30px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     .form-control::placeholder {
@@ -142,20 +136,20 @@
     <h2 class="fw-bold mb-2">Create Account</h2>
     <p class="text-white-50 mb-4">Join GlobeTrail AI to start exploring</p>
 
-    <form action="/signup" method="POST">
+    <form id="signupForm">
       <div class="mb-3 text-start">
         <label class="form-label">Full Name</label>
-        <input type="text" class="form-control" name="name" placeholder="Enter full name" required>
+        <input type="text" class="form-control" id="name" placeholder="Enter full name" required>
       </div>
 
       <div class="mb-3 text-start">
         <label class="form-label">Email</label>
-        <input type="email" class="form-control" name="email" placeholder="Enter email" required>
+        <input type="email" class="form-control" id="email" placeholder="Enter email" required>
       </div>
 
       <div class="mb-3 text-start">
         <label class="form-label">Password</label>
-        <input type="password" class="form-control" name="password" placeholder="Create password" required>
+        <input type="password" class="form-control" id="password" placeholder="Create password" required>
       </div>
 
       <button type="submit" class="btn btn-primary w-100 mb-3">Sign Up</button>
@@ -165,6 +159,44 @@
       </p>
     </form>
   </div>
+
+  <!-- Firebase SDKs -->
+  <script type="module">
+    // Firebase SDKs
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+
+    // Firebase config
+    const firebaseConfig = {
+      apiKey: "AIzaSyBJbP9aEi_tJ3t8a2PMjB0ehlPUJyPZTRU",
+      authDomain: "travercia.firebaseapp.com",
+      projectId: "travercia",
+      storageBucket: "travercia.appspot.com",
+      messagingSenderId: "1030723792767",
+      appId: "1:1030723792767:web:46d1f15c6d6eac2e00744a"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth();
+
+    // Form submission handler
+    const signupForm = document.getElementById('signupForm');
+    signupForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+
+      try {
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        alert("✅ Account created successfully!");
+        // Redirect or do something else
+        window.location.href = "login.html"; // or homepage
+      } catch (error) {
+        alert("❌ Error: " + error.message);
+      }
+    });
+  </script>
 
   <!-- Theme Toggle Script -->
   <script>
