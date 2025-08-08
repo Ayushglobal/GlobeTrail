@@ -399,8 +399,6 @@
 </head>
 <body>
 
-<!-- KEEP YOUR NAVBAR + CHAT + CAROUSEL + SCRIPT HERE -->
-<!-- ✅ Paste your full body content and script code here unchanged. -->
 
 <nav class="navbar navbar-expand-lg navbar-dark px-4 glass-navbar">
   <a class="navbar-brand gradient-text" href="#">🌍 GlobeTrail</a>
@@ -417,8 +415,6 @@
     </ul>
   </div>
 </nav>
-
-
 
   <!-- MAIN -->
   <div class="main-container">
@@ -474,15 +470,13 @@
 
   // 🧠 Function to format plain text into bullet points
   function formatAsBullets(text) {
-  const lines = text.split("\n").filter(line => line.trim() !== "");
-  return lines.map(line => {
-    const content = line.replace(/^[-→•*]+\s*/, "");  // Remove bullet-like prefixes
-    return `<div><strong>• ${content}</strong></div>`;  // Add dot + bold
-  }).join("");
-}
+    const lines = text.split("\n").filter(line => line.trim() !== "");
+    return lines.map(line => {
+      const content = line.replace(/^[-→•*]+\s*/, ""); 
+      return `<div><strong>• ${content}</strong></div>`;  
+    }).join("");
+  }
 
-
-  // 📦 Append a new chat message to the chat box
   function appendMessage(content, sender) {
     const wrapper = document.createElement("div");
     wrapper.className = sender === "ai" ? "bot-message left" : "user-message right";
@@ -496,11 +490,10 @@
     const message = document.createElement("div");
     message.className = "message";
 
-    // 💡 Apply bullet formatting and font styling only for bot messages
     if (sender === "ai") {
       content = formatAsBullets(content);
-      message.style.fontSize = "1.08rem"; // 👈 Change font size here
-      message.style.lineHeight = "1.7";    // 👈 Line height spacing
+      message.style.fontSize = "1.08rem"; 
+      message.style.lineHeight = "1.7";    
     }
 
     message.innerHTML = content;
@@ -511,12 +504,10 @@
     chatBox.scrollTo({ top: chatBox.scrollHeight, behavior: 'smooth' });
   }
 
-  // Show "Typing..." simulation
   function showTyping() {
     appendMessage('<em>Typing...</em>', 'ai');
   }
 
-  // Remove the last typing message
   function removeTyping() {
     const messages = chatBox.querySelectorAll(".bot-message");
     if (messages.length > 0) {
@@ -547,10 +538,12 @@
         body: JSON.stringify({ messages: conversationHistory }),
       });
 
+      if (!res.ok) throw new Error("Server error");
+
       const data = await res.json();
       removeTyping();
 
-      if (data.status === "success") {
+      if (data.reply) {
         appendMessage(data.reply, "ai");
         conversationHistory.push({ role: "assistant", content: data.reply });
       } else {
@@ -587,7 +580,7 @@
       avatar.alt = "Bot";
       const bubble = document.createElement("div");
       bubble.className = "message";
-      bubble.style.fontSize = "1.05rem"; // 👈 Font size for typing message
+      bubble.style.fontSize = "1.05rem";
       bubble.style.lineHeight = "1.6";
 
       output.appendChild(avatar);
@@ -610,8 +603,3 @@
     });
   };
 </script>
-
-  <!-- Bootstrap JS -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
