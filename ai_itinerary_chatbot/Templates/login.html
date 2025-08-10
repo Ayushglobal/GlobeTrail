@@ -164,7 +164,6 @@
 
   <!-- Firebase SDK -->
   <script type="module">
-    // Firebase imports
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
     import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
@@ -178,11 +177,10 @@
       appId: "1:1030723792767:web:46d1f15c6d6eac2e00744a"
     };
 
-    // Init Firebase
+
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
-    // Handle login
     const loginForm = document.getElementById("loginForm");
     loginForm.addEventListener("submit", (e) => {
       e.preventDefault();
@@ -191,8 +189,8 @@
 
       signInWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
-          // Redirect on successful login
-          window.location.href = "home.html";
+         
+          window.location.href = "Home.html";
         })
         .catch((error) => {
           alert("❌ Login failed: " + error.message);
@@ -201,7 +199,7 @@
   </script>
 
   <script>
-    // Theme toggle
+  
     const toggleBtn = document.getElementById('toggleTheme');
     const icon = toggleBtn.querySelector('i');
     toggleBtn.addEventListener('click', () => {
